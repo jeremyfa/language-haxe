@@ -588,7 +588,7 @@
         'name': 'storage.modifier.macro.haxe'
       }
       {
-        'match': '\\b(public|private|static|dynamic|inline|extern|typedef|override)\\b'
+        'match': '\\b(public|private|static|dynamic|inline|extern|typedef|override|abstract)\\b'
         'name': 'storage.modifier.haxe'
       }
       {
