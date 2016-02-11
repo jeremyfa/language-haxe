@@ -123,14 +123,14 @@
 
   'try':
     'prefix': 'try'
-    'body': 'try{\n\t$0\n}catch ( ${1:error:Dynamic} ){\n\ttrace(\'Error: \$error\');\n}'
+    'body': 'try {\n\t$0\n} catch (${1:error:Dynamic} ) {\n\ttrace(\'Error: \$error\');\n}'
   'catch':
     'prefix': 'catch'
-    'body': 'catch ( ${1:error } ) {\n\t${2:expression}\n}'
+    'body': 'catch (${1:error }) {\n\t${2:expression}\n}'
 
   'do..while':
     'prefix': 'do'
-    'body': 'do {\n\t$0\n} while ( ${1:condition} );'
+    'body': 'do {\n\t$0\n} while (${1:condition});'
   'continue':
     'prefix': 'co'
     'body': 'continue;'
@@ -140,25 +140,25 @@
 
   'if':
     'prefix': 'if'
-    'body': 'if ( ${1:condition} ) {\n\t$0\n}'
+    'body': 'if (${1:condition}) {\n\t$0\n}'
   'else':
     'prefix': 'else'
     'body': 'else {\n\t$0\n}'
   'else..if':
     'prefix': 'elseif'
-    'body': 'else if ( ${1:condition} ) {\n\t$0\n}'
+    'body': 'else if (${1:condition}) {\n\t$0\n}'
   'if..else':
     'prefix': 'ifelse'
-    'body': 'if ( ${1:condition} ) \{\n\t${2:expression}\n\} else \{\n\t${3:expression}\n\}'
+    'body': 'if (${1:condition}) \{\n\t${2:expression}\n\} else \{\n\t${3:expression}\n\}'
   'switch':
     'prefix': 'switch'
-    'body': 'switch ( $1 ) {\n\tcase $2:\n\t\t$0\n}\n'
+    'body': 'switch ($1) {\n\tcase $2:\n\t\t$0\n}\n'
   'case':
     'prefix': 'case'
     'body': 'case ${1:expression}:\n\t${2:statement}\n'
   'default':
     'prefix': 'def'
-    'body': 'default :\n\t${1:statement}'
+    'body': 'default:\n\t${1:statement}'
   'return':
     'prefix': 'ret'
     'body': 'return $1;$0'
@@ -167,116 +167,60 @@
     'prefix': '/**'
     'body': '/**\n *  $0\n **/'
   'package':
-    'prefix': 'pack'
+    'prefix': 'package'
     'body': 'package $1;$0'
   'class':
-    'prefix': 'cl'
+    'prefix': 'class'
     'body': 'class ${1:Class} ${2:extends ${3:SuperClass}} ${4:implements ${5:Interface}} \n\{\n\n\tpublic function new()\n\t\{\n\t\t${6:super();\n\t\t}$0\n\t\}\n\}'
   'enum':
-    'prefix': 'en'
+    'prefix': 'enum'
     'body': 'enum ${1:Name}\n{\n\t$0\n}'
   'extern':
-    'prefix': 'ex'
+    'prefix': 'extern'
     'body': 'extern '
   'import':
-    'prefix': 'im'
+    'prefix': 'import'
     'body': 'import ${1:package};$0'
   'interface':
-    'prefix': 'in'
+    'prefix': 'interface'
     'body': 'interface ${1:Interface} ${2:extends ${3:Parent} }\n{\n\t$0\n}'
   'macro class':
     'prefix': 'macro'
     'body': '@:macro class ${1:Class}\n\{\n\tpublic static function ${2:main}()\{\n\t\t$0\n\t\}\n\}'
   'macro function':
-    'prefix': 'mac'
+    'prefix': 'macro'
     'body': '@:macro public static function ${1:name}(${2:e:haxe.macro.Expr}) : haxe.macro.Expr\n\{\n\t$0\n\}'
 
   'for var in 0...end':
-    'prefix': 'fori'
-    'body': 'for ( ${1:var} in ${2:0}...${3:end} ) {\n\t${4:expression}\n}'
+    'prefix': 'for'
+    'body': 'for (${1:var} in ${2:0}...${3:end}) {\n\t${4:expression}\n}'
   'for in':
     'prefix': 'for'
-    'body': 'for ( $1 in $2 ) {\n\t$0\n}'
+    'body': 'for ($1 in $2) {\n\t$0\n}'
 
   'main':
     'prefix': 'main'
-    'body': 'public static function main() : Void \n{\n\t$0\n}'
+    'body': 'public static function main():Void {\n\t$0\n}'
+  'new':
+    'prefix': 'new'
+    'body': 'public function new() {\n\t$0\n}'
   'function':
-    'prefix': 'fn'
-    'body': 'function ${1:name} ( ${2:params} )${3: : ${4:Void}}\n\{\n\t$0\n\}'
-  'method':
-    'prefix': 'fun'
-    'body': '${1:private }${2:public }${3:static }${4:inline }function ${5:name} ($6)${7: : ${8:Void}}\n\{\n\t$0\n\}'
+    'prefix': 'function'
+    'body': 'function ${1:name}(${2:params})${3::${4:Void}} \{\n\t$0\n\}'
 
   'private':
-    'prefix': 'pr'
+    'prefix': 'private'
     'body': 'private '
   'public':
-    'prefix': 'p'
+    'prefix': 'public'
     'body': 'public '
   'inline':
-    'prefix': 'i'
+    'prefix': 'inline'
     'body': 'inline '
   'static':
-    'prefix': 's'
+    'prefix': 'static'
     'body': 'static '
 
-  'private function':
-    'prefix': 'prf'
-    'body': 'private function ${1:name}($2)${3: : ${4:Void}}\n{\n\t$0\n}\n'
-  'private inline function':
-    'prefix': 'prif'
-    'body': 'private inline function ${1:name}($2)${3: : ${4:Void}}\n{\n\t$0\n}\n'
-  'private static function':
-    'prefix': 'prsf'
-    'body': 'private static function ${1:name}($2)${3: : ${4:Void}}\n{\n\t$0\n}\n'
-  'private static inline function':
-    'prefix': 'prsif'
-    'body': 'private static inline function ${1:name}($2)${3: : ${4:Void}}\n{\n\t$0\n}\n'
-
-  'public function':
-    'prefix': 'pf'
-    'body': 'public function ${1:name}($2)${3: : ${4:Void}}\n{\n\t$0\n}\n'
-  'public inline function':
-    'prefix': 'pif'
-    'body': 'public inline function ${1:name}($2)${3: : ${4:Void}}\n{\n\t$0\n}\n'
-  'public static function':
-    'prefix': 'psf'
-    'body': 'public static function ${1:name}($2)${3: : ${4:Void}}\n{\n\t$0\n}\n'
-  'public static inline function':
-    'prefix': 'psif'
-    'body': 'public static inline function ${1:name}($2)${3: : ${4:Void}}\n{\n\t$0\n}\n'
-
   'autotyped variable':
-    'prefix': 'v'
-    'body': 'var ${1:name} ${2:: ${3:Type}}${4: = }$5;$0'
-    # 'body': 'var ${1:name} ${2:= ${3:val}};$0'
-  'typed variable':
     'prefix': 'var'
-    'body': 'var $1:${2:Type} ${3:= }$4;$0'
-  'private variable':
-    'prefix': 'prv'
-    'body': 'private var $1 ${2:: ${3:Type}};$0'
-  'private static variable':
-    'prefix': 'prsv'
-    'body': 'private static var $1 ${2:: ${3:Type}};$0'
-  'private static inline variable':
-    'prefix': 'prsiv'
-    'body': 'private static inline var $1 ${2:: ${3:Type}} = $4;$0'
-  'public variable':
-    'prefix': 'pv'
-    'body': 'public var $1 ${2:: ${3:Type}};$0'
-  'public static variable':
-    'prefix': 'psv'
-    'body': 'public static var $1 ${2:: ${3:Type}};$0'
-  'public static inline variable':
-    'prefix': 'psiv'
-    'body': 'public static inline var $1 ${2:: ${3:Type}} = $4;$0'
-
-  # 'property getter setter':
-  #   'prefix': 'prop'
-  #   'body': 'public var ${1:Property}(get,set):${2:Type};\nprivate var _${1:Property}:${2:Type};\nprivate inline function get_${1:Property}():${2:Type}{ ${3:\n}return _${1:Property}; }\nprivate inline function set_${1:Property}(value:${2:Type}):${2:Type}{ ${4:\n}return _${1:Property} = value; }\n'
-
-  # 'assign argument to property':
-  #   'prefix': 'this'
-  #   'body': 'this.${1:property} = ${1:arg};\n'
+    'body': 'var ${1:name} ${2:: ${3:Type}}${4: = }$5;$0'
