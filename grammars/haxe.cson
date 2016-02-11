@@ -617,6 +617,9 @@
             'match': '\\\\.'
             'name': 'constant.character.escape.haxe'
           }
+          {
+            'include': '#embedded-xml'
+          }
         ]
       }
       {
@@ -634,7 +637,186 @@
             'match': '\\\\.'
             'name': 'constant.character.escape.haxe'
           }
+          {
+            'include': '#embedded-xml'
+          }
         ]
+      }
+    ]
+  'embedded-xml-tag-attributes':
+    'patterns': [
+      {
+        'include': '#embedded-xml-tag-attribute-name'
+      }
+      {
+        'include': '#embedded-xml-string-double-quoted'
+      }
+      {
+        'include': '#embedded-xml-string-single-quoted'
+      }
+      {
+        'include': '#embedded-xml-curly-double'
+      }
+      {
+        'include': '#embedded-xml-curly-simple'
+      }
+    ]
+  'embedded-xml-tag-attribute-name':
+    'name': 'meta.tag.attribute-name.haxe'
+    'match': '\\b([a-zA-Z0-9\\-:]+)'
+    'captures':
+      '1':
+        'name': 'entity.other.attribute-name.haxe'
+  'embedded-xml-string-double-quoted':
+    'begin': '"'
+    'end': '"'
+    'name': 'string.quoted.double.haxe'
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.haxe'
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.haxe'
+    'patterns': [
+      {
+        'include': '#embedded-xml-entities'
+      }
+      {
+        'include': '#embedded-xml-curly-double'
+      }
+      {
+        'include': '#embedded-xml-curly-simple'
+      }
+    ]
+  'embedded-xml-string-single-quoted':
+    'begin': '\''
+    'end': '\''
+    'name': 'string.quoted.single.haxe'
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.haxe'
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.haxe'
+    'patterns': [
+      {
+        'include': '#embedded-xml-entities'
+      }
+      {
+        'include': '#embedded-xml-curly-double'
+      }
+      {
+        'include': '#embedded-xml-curly-simple'
+      }
+    ]
+  'embedded-xml-entities':
+    'patterns': [
+      {
+        'name': 'constant.character.entity.haxe'
+        'match': '(&)([a-zA-Z0-9]+|#[0-9]+|#x[0-9a-fA-F]+)(;)'
+        'captures':
+          '1':
+            'name': 'punctuation.definition.entity.haxe'
+          '3':
+            'name': 'punctuation.definition.entity.haxe'
+      }
+      {
+        'name': 'invalid.illegal.bad-ampersand.haxe'
+        'match': '&'
+      }
+    ]
+  'embedded-xml-curly-simple':
+    'begin': '{'
+    'end': '}'
+    'name': 'meta.tag.brace.curly.simple.haxe'
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.brace.curly.simple.end.haxe'
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.brace.curly.simple.start.haxe'
+  'embedded-xml-curly-double':
+    'begin': '{{'
+    'end': '}}'
+    'name': 'meta.tag.brace.curly.double.haxe'
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.brace.curly.double.end.haxe'
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.brace.curly.double.start.haxe'
+  'embedded-xml-tag-open':
+    'begin': '(<)([a-zA-Z0-9\.:$_]+)'
+    'end': '(/?>)()'
+    'name': 'meta.tag.open.block.any.html.haxe'
+    'endCaptures':
+      '1':
+        'name': 'punctuation.definition.tag.end.haxe'
+    'beginCaptures':
+      '1':
+        'name': 'punctuation.definition.tag.begin.haxe'
+      '2':
+        'name': 'entity.name.tag.haxe'
+    'patterns': [
+      {
+        'include': '#embedded-xml-tag-attributes'
+      }
+    ]
+  'embedded-xml-tag-close':
+    'match': '(</)([^>]+)(>)'
+    'name': 'meta.tag.closed.block.any.html.haxe'
+    'captures':
+      '1':
+        'name': 'punctuation.definition.tag.begin.haxe'
+      '2':
+        'name': 'entity.name.tag.haxe'
+      '3':
+        'name': 'punctuation.definition.tag.end.haxe'
+  'embedded-xml-inner-text':
+    'match': '([^<{]+)'
+    'name': 'meta.tag.inner.text.haxe'
+  'embedded-xml-tag-invalid':
+    'name': 'invalid.illegal.tag.incomplete.haxe'
+    'match': '<\\s*>'
+  'embedded-xml-comments':
+    'patterns': [
+      {
+        'begin': '<!--'
+        'captures':
+          '0':
+            'name': 'punctuation.definition.comment.haxe'
+        'end': '-->'
+        'name': 'comment.block.haxe.embedded.xml'
+      }
+      {
+        'captures':
+          '1':
+            'name': 'comment.line.double-slash.haxe'
+          '2':
+            'name': 'punctuation.definition.comment.haxe'
+        'match': '\\s*((//).*$\\n?)'
+      }
+    ]
+  'embedded-xml':
+    'name': 'meta.embedded-xml.haxe'
+    'patterns': [
+      {
+        'include': '#embedded-xml-tag-open'
+      }
+      {
+        'include': '#embedded-xml-tag-close'
+      }
+      {
+        'include': '#embedded-xml-curly-double'
+      }
+      {
+        'include': '#embedded-xml-comments'
+      }
+      {
+        'include': '#embedded-xml-curly-simple'
+      }
+      {
+        'include': '#embedded-xml-tag-invalid'
       }
     ]
 'scopeName': 'source.haxe'
