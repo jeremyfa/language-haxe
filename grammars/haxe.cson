@@ -788,14 +788,6 @@
         'end': '-->'
         'name': 'comment.block.haxe.embedded.xml'
       }
-      {
-        'captures':
-          '1':
-            'name': 'comment.line.double-slash.haxe'
-          '2':
-            'name': 'punctuation.definition.comment.haxe'
-        'match': '\\s*((//).*$\\n?)'
-      }
     ]
   'embedded-xml':
     'name': 'meta.embedded-xml.haxe'
