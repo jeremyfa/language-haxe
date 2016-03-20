@@ -1,603 +1,663 @@
-'comment': 'Haxe Syntax: version 3.1.1'
+# This is a fork of js grammar file modified to work best with haxe
+'scopeName': 'source.hx'
 'fileTypes': [
   'hx'
 ]
 'foldingStartMarker': '(\\{\\s*(//.*)?$|^\\s*// \\{\\{\\{|#if)'
 'foldingStopMarker': '^\\s*(\\}|// \\}\\}\\}$|#end)'
-'name': 'Haxe3'
+'firstLineMatch': '^#!.*\\b(haxe)'
+'name': 'Haxe'
 'patterns': [
   {
-    'include': '#comments'
+    'comment': 'Haxe import/using'
+    'begin': '(?<!\\.)\\b(import|using)(?!\\s*:)\\b'
+    'beginCaptures':
+      '1':
+        'name': 'keyword.control.haxe'
+    'patterns': [
+      {
+        'comment': '(default|*|name) (in|as) alias'
+        'captures':
+          '1':
+            'name': 'entity.name.type.module.haxe'
+          '2':
+            'name': 'variable.language.import-all.haxe'
+          '3':
+            'name': 'keyword.control.haxe'
+          '4':
+            'name': 'entity.name.type.module.haxe'
+        'match': '(?x)
+          (?: \\b([A-Z][a-zA-Z_$0-9]*)\\b | (\\*) | \\b(?:[a-zA-Z_$][a-zA-Z_$0-9]*)\\b)
+          \\s*
+          (\\b (?:in|as) \\b)
+          \\s*
+          (?: \\b([A-Z][a-zA-Z_$0-9]*)\\b | \\b(?:[a-zA-Z_$][a-zA-Z_$0-9]*)\\b)
+        '
+      }
+      {
+        'match': '\\*'
+        'name': 'variable.language.import-all.haxe'
+      }
+      {
+        'include': '#strings'
+      }
+      {
+        'include': '#comments'
+      }
+      {
+        'include': '#types'
+      }
+    ]
+    'end': '(?=;|$)'
+    'name': 'meta.import.haxe'
+  }
+  {
+    'match': '(?<!\\.)\\b(super|this)(?!\\s*:)\\b|(?<=\\?)(?:\\s*)(super|this)(?=\\s*:)'
+    'captures':
+      '1':
+        'name': 'variable.language.haxe'
+      '2':
+        'name': 'variable.language.haxe'
+  }
+  {
+    # [param|(params)] => [expression|{statements}]
+    'begin': '''(?x)
+      (?=
+        (?<![A-Za-z0-9])
+        ((\\(([^\\(\\)]*)?\\))|[\\w$]+)
+        \\s*=>
+      )
+    '''
+    'end': '''(?x)
+      (?<=})|
+      ((?!
+        \\s*{|
+        \\G\\(|
+        \\G[\\w$]+|
+        \\s*/\\*|\\s*//
+      )(?=\\s*\\S))
+    '''
+    'patterns': [
+      {
+        'include': '#comments'
+      }
+      {
+        'include': '#metadatas'
+      }
+      {
+        'include': '#function_body'
+      }
+      {
+        'begin': '\\G'
+        'end': '(?<=(=>))'
+        'name': 'meta.function.arrow.haxe'
+        'patterns': [
+          {
+            'include': '#arrow_function_innards'
+          }
+        ]
+      }
+    ]
+  }
+  {
+    # [.]foo = ... => ...
+    'begin': '''(?x)
+      (?=
+        (\\.)?[a-zA-Z_$][\\w$]*
+        \\s*(=)\\s*
+        ((\\(([^\\(\\)]*)?\\))|[\\w$]+)
+        \\s*=>
+      )
+    '''
+    'end': '''(?x)
+      (?<=})|
+      ((?!
+        \\s*{|
+        \\G(\\.)?[a-zA-Z_$][\\w$]*\\s*(=)\\s*\\(|
+        \\G(\\.)?[a-zA-Z_$][\\w$]*\\s*(=)\\s*[\\w$]+|
+        \\s*/\\*|\\s*//
+      )(?=\\s*\\S))
+    '''
+    'patterns': [
+      {
+        'include': '#comments'
+      }
+      {
+        'include': '#metadatas'
+      }
+      {
+        'include': '#function_body'
+      }
+      {
+        'begin': '\\G'
+        'end': '(?<=(=>))'
+        'name': 'meta.function.arrow.haxe'
+        'patterns': [
+          {
+            'match': '\\G(\\.)?([a-zA-Z_$][\\w$]*)\\s*(=)'
+            'captures':
+              '1':
+                'name': 'meta.delimiter.method.period.haxe'
+              '2':
+                'name': 'entity.name.function.haxe'
+              '3':
+                'name': 'keyword.operator.assignment.haxe'
+          }
+          {
+            'include': '#arrow_function_innards'
+          }
+        ]
+      }
+    ]
+  }
+  {
+    # foo: ... => ...
+    'begin': '''(?x)
+      (?=
+        \\b[a-zA-Z_$][\\w$]*
+        \\s*:\\s*
+        ((\\(([^\\(\\)]*)?\\))|[\\w$]+)
+        \\s*=>
+      )
+    '''
+    'end': '''(?x)
+      (?<=})|
+      ((?!
+        \\s*{|
+        \\G[\\w$]+:|
+        \\s*/\\*|\\s*//
+      )(?=\\s*\\S))
+    '''
+    'patterns': [
+      {
+        'include': '#comments'
+      }
+      {
+        'include': '#metadatas'
+      }
+      {
+        'include': '#function_body'
+      }
+      {
+        'begin': '\\G'
+        'end': '(?<=(=>))'
+        'name': 'meta.function.arrow.json.haxe'
+        'patterns': [
+          {
+            'match': '\\b([a-zA-Z_$][\\w$]*)\\s*(:)\\s*'
+            'captures':
+              '1':
+                'name': 'entity.name.function.haxe'
+              '2':
+                'name': 'keyword.operator.assignment.haxe'
+          }
+          {
+            'include': '#arrow_function_innards'
+          }
+        ]
+      }
+    ]
+  }
+  {
+    # "foo": ... => ...
+    'begin': '''(?x)
+      (?=
+        ((\'[^\']*?\')|("[^"]*?"))
+        \\s*:\\s*
+        ((\\(([^\\(\\)]*)?\\))|[\\w$]+)
+        \\s*=>
+      )
+    '''
+    'end': '''(?x)
+      (?<=})|
+      ((?!
+        \\G((\'[^\']*?\')|("[^"]*?"))|
+        \\s*{|
+        \\s*/\\*|\\s*//
+      )(?=\\s*\\S))
+    '''
+    'patterns': [
+      {
+        'include': '#comments'
+      }
+      {
+        'include': '#metadatas'
+      }
+      {
+        'include': '#function_body'
+      }
+      {
+        'begin': '\\G'
+        'end': '(?<=(=>))'
+        'name': 'meta.function.arrow.json.haxe'
+        'patterns': [
+          {
+            'match': '(?:((\')([^\']*?)(\'))|((")([^"]*?)(")))\\s*(:)'
+            'captures':
+              '1':
+                'name': 'string.quoted.single.haxe'
+              '2':
+                'name': 'punctuation.definition.string.begin.haxe'
+              '3':
+                'name': 'entity.name.function.haxe'
+              '4':
+                'name': 'punctuation.definition.string.end.haxe'
+              '5':
+                'name': 'string.quoted.double.haxe'
+              '6':
+                'name': 'punctuation.definition.string.begin.haxe'
+              '7':
+                'name': 'entity.name.function.haxe'
+              '8':
+                'name': 'punctuation.definition.string.end.haxe'
+              '9':
+                'name': 'keyword.operator.assignment.haxe'
+          }
+          {
+            'include': '#arrow_function_innards'
+          }
+        ]
+      }
+    ]
+  }
+  {
+    'match': '(=>)'
+    'captures':
+      '0':
+        'name': 'meta.function.arrow.haxe'
+      '1':
+        'name': 'storage.type.function.arrow.haxe'
+  }
+  {
+    'begin': '''(?x)
+      \\b(class)\\b
+    '''
+    'beginCaptures':
+      '1':
+        'name': 'storage.type.class.haxe'
+      '2':
+        'name': 'entity.name.type.haxe'
+    'end': '(?=\\{)'
+    'patterns': [
+      {
+        'include': '#comments'
+      }
+      {
+        'include': '#metadatas'
+      }
+      {
+        'include': '#properties'
+      }
+      {
+        'include': '#types'
+      }
+      {
+        'include': '#parents'
+      }
+    ]
+  }
+  {
+    'begin': '''(?x)
+      \\b(typedef|enum|abstract|interface)\\b
+    '''
+    'beginCaptures':
+      '1':
+        'name': 'storage.type.modifier.haxe'
+      '2':
+        'name': 'entity.name.type.haxe'
+    'end': '(?=\\{)'
+    'patterns': [
+      {
+        'include': '#comments'
+      }
+      {
+        'include': '#metadatas'
+      }
+      {
+        'include': '#properties'
+      }
+      {
+        'include': '#types'
+      }
+      {
+        'include': '#parents'
+      }
+    ]
+  }
+  {
+    'captures':
+      '1':
+        'name': 'keyword.control.new.haxe'
+      '2':
+        'name': 'entity.name.type.instance.haxe'
+    'match': '(new)\\s+(\\$?\\w+(?:\\.\\w*)?)'
+    'name': 'meta.class.instance.constructor'
   }
   {
     'include': '#strings'
   }
   {
-    'include': '#constants'
+    'include': '#comments'
   }
   {
-    'include': '#class-definition'
+    'include': '#metadatas'
   }
   {
-    'include': '#function-definition'
+    'begin': '(?:#if|#else|#elseif|#end)'
+    'beginCaptures':
+      '0':
+        'name': 'constant.variable.conditional.haxe'
+    'name': 'constant.variable.conditional.haxe'
+    'end': '(?=$)'
   }
   {
-    'include': '#storage'
-  }
-  {
-    'include': '#constructor'
-  }
-  {
-    'include': '#keywords'
-  }
-  {
-    'include': '#regex'
-  }
-  {
-    'include': '#field-completions'
-  }
-  {
-    'match': '#(if|else|elseif|end)\\b'
-    'name': 'keyword.preprocessor.macro.haxe'
-  }
-  {
-    'match': '(flash.)?\\b(Accessibility|Boot|Button|Camera|Color|ContextMenu|ContextMenuItem|ExtendedKey|Key|Lib|LoadVars|LocalConnection|Microphone|Mouse|MovieClip|MovieClipLoader|NetConnection|NetStream|PrintJob|Selection|SelectionListener|SharedObject|Sound|Stage|System|TextField|TextFormat|TextSnapshot|Video|XMLRequest|XMLSocket)\\b'
-    'name': 'support.class.haxe.flash'
-  }
-  {
-    'match': '(flash.display.)?\\b(BitmapData)\\b'
-    'name': 'support.class.haxe.flash.display'
-  }
-  {
-    'match': '(flash.external.)?\\b(ExternalInterface)\\b'
-    'name': 'support.class.haxe.flash.external'
-  }
-  {
-    'match': '\\b(BevelFilter|BitmapFilter|BlurFilter|ColorMatrixFilter|ConvolutionFilter|DisplacementMapFilter|DropShadowFilter|GlowFilter|GradientBevelFilter|GradientGlowFilter)\\b'
-    'name': 'support.class.haxe.flash.filters'
-  }
-  {
-    'match': '(flash.geom.)?\\b(ColorTransform|Matrix|Point|Rectangle|Transform)\\b'
-    'name': 'support.class.haxe.flash.geom'
-  }
-  {
-    'match': '\\b(FileReference|FileReferenceList)\\b'
-    'name': 'support.class.haxe.flash.net'
-  }
-  {
-    'match': '(flash.system.)?\\b(Capabilities|IME|Security|LoaderContext|SecurityDomain|ApplicationDomain)\\b'
-    'name': 'support.class.haxe.flash.system'
-  }
-  {
-    'match': '\\b(StyleSheet|TextRenderer)\\b'
-    'name': 'support.class.haxe.flash.text'
-  }
-  {
-    'match': '\\b(Boot|Error|Lib|Vector)\\b'
-    'name': 'support.class.haxe.flash9'
-  }
-  {
-    'match': '\\b(Accessibility|AccessibilityImplementation|AccessibilityProperties)\\b'
-    'name': 'support.class.haxe.flash9.accessibility'
-  }
-  {
-    'match': '(flash.display.)?\\b(AVM1Movie|ActionScriptVersion|Bitmap|BitmapData|BitmapDataChannel|BlendMode|CapsStyle|DisplayObject|DisplayObjectContainer|FrameLabel|GradientType|Graphics|GraphicsBitmapFill|GraphicsEndFill|GraphicsGradientFill|GraphicsPath|GraphicsPathCommand|GraphicsPathWinding|GraphicsShaderFill|GraphicsSolidFill|GraphicsStroke|GraphicsTrianglePath|IBitmapDrawable|IGraphicsData|IGraphicsFill|IGraphicsPath|IGraphicsStroke|InteractiveObject|InterpolationMethod|JointStyle|LineScaleMode|Loader|LoaderInfo|MorphShape|MovieClip|PixelSnapping|SWFVersion|Scene|Shader|ShaderData|ShaderInput|ShaderJob|ShaderParameter|ShaderParameterType|ShaderPrecision|Shape|SimpleButton|SpreadMethod|Sprite|Stage|StageAlign|StageDisplayStage|StageQuality|StageScaleMode|TriangleCulling)\\b'
-    'name': 'support.class.haxe.flash9.display'
-  }
-  {
-    'match': '\\b(EOFError|IOError|IllegalOperationError|InvalidSWFError|MemoryError|ScriptTimeoutError|StackOverflowError)\\b'
-    'name': 'support.class.haxe.flash9.errors'
-  }
-  {
-    'match': '\\b(ActivityEvent|AsyncErrorEvent|ContextMenuEvent|DataEvent|ErrorEvent|Event|EventDispatcher|EventPhase|FocusEvent|FullScreenEvent|HTTPStatusEvent|IEventDispatcher|IMEEvent|IOErrorEvent|KeyboardEvent|MouseEvent|NetFilterEvent|NetStatusEvent|ProgressEvent|SamplesCallbackEvent|SecurityErrorEvent|ShaderEvent|StatusEvent|SyncEvent|TextEvent|TimerEvent|WeakFunctionClosure|WeakMethodClosure)\\b'
-    'name': 'support.class.haxe.flash9.events'
-  }
-  {
-    'match': '\\b(ExternalInterface)\\b'
-    'name': 'support.class.haxe.flash9.external'
-  }
-  {
-    'match': '\\b(BevelFilter|BitmapFilter|BitmapFilterQuality|BitmapFilterType|BlurFilter|ColorMatrixFilter|ConvolutionFilter|DisplacementMapFilter|DisplacementMapFilterMode|DropShadowFilter|GlowFilter|GradientBevelFilter|GradientGlowFilter|ShaderFilter)\\b'
-    'name': 'support.class.haxe.flash9.filters'
-  }
-  {
-    'match': '\\b(ColorTransform|Matrix|Matrix3D|Orientation3D|PerspectiveProjection|Point|Rectangle|Transform|Utils3D|Vector3D)\\b'
-    'name': 'support.class.haxe.flash9.geom'
-  }
-  {
-    'match': '\\b(Camera|ID3Info|Microphone|Sound|SoundChannel|SoundCodec|SoundLoaderContext|SoundMixer|SoundTransform|Video)\\b'
-    'name': 'support.class.haxe.flash9.media'
-  }
-  {
-    'match': '\\b(DynamicPropertyOutput|FileFilter|FileReference|FileReferenceList|IDynamicPropertyOutput|IDynamicPropertyWriter|LocalConnection|NetConnection|NetStream|NetStreamInfo|NetStreamPlayOptions|NetStreamPlayTransitions|ObjectEncoding|Responder|SharedObject|SharedObjectFlushStatus|Socket|URLLoader|URLLoaderDataFormat|URLRequest|URLRequestHeader|URLRequestMethod|URLStream|URLVariables|XMLSocket)\\b'
-    'name': 'support.class.haxe.flash9.net'
-  }
-  {
-    'match': '\\b(PrintJob|PrintJobOptions|PrintJobOrientation)\\b'
-    'name': 'support.class.haxe.flash9.printing'
-  }
-  {
-    'match': '\\b(Api|DeleteObjectSample|NewObjectSample|Sample|StackFrame)\\b'
-    'name': 'support.class.haxe.flash9.sampler'
-  }
-  {
-    'match': '\\b(ApplicationDomain|Capabilities|FSCommand|IME|IMEConversionMode|JPEGLoaderContext|LoaderContext|Security|SecurityDomain|SecurityPanel|System)\\b'
-    'name': 'support.class.haxe.flash9.system'
-  }
-  {
-    'match': '\\b(AntiAliasType|CSMSettings|Font|FontStyle|FontType|GridFitType|StaticText|StyleSheet|TextColorType|TextDisplayMode|TextExtent|TextField|TextFieldAutoSize|TextFieldType|TextFormat|TextFormatAlign|TextFormatDisplay|TextLineMetrics|TextRenderer|TextRun|TextSnapshot)\\b'
-    'name': 'support.class.haxe.flash9.text'
-  }
-  {
-    'match': '\\b(BreakOpportunity|ContentElement|DigitCase|DigitWidth|EastAsianJustifier|ElementFormat|FontDescription|FontLookup|FontMetrics|FontPosture|FontWeight|GlyphRotation|GraphicElement|GroupElement|JustificationStyle|Kerning|LigatureLevel|LineJustification|SpaceJustifier|TabAlignment|TabStop|TextBaseline|TextBlock|TextElement|TextJustifier|TextLine|TextLineCreationResult|TextLineMirrorRegion|TextLineValidity|TextRotation|TypographicCase)\\b'
-    'name': 'support.class.haxe.flash9.text.engine'
-  }
-  {
-    'match': '\\b(Trace)\\b'
-    'name': 'support.class.haxe.flash9.trace'
-  }
-  {
-    'match': '\\b(ContextMenu|ContextMenuBuiltInItems|ContextMenuClipboardItems|ContextMenuItem|KeyLocation|Keyboard|Mouse|MouseCursor)\\b'
-    'name': 'support.class.haxe.flash9.ui'
-  }
-  {
-    'match': '\\b(ByteArray|Dictionary|Endian|IDataInput|IDataOutput|IExternalizable|Namespace|ObjectInput|ObjectOutput|Proxy|QName|SetIntervalTimer|Timer|TypedDictionary)\\b'
-    'name': 'support.class.haxe.flash9.utils'
-  }
-  {
-    'match': '\\b(XML|XMLDocument|XMLList|XMLNode|XMLNodeType|XMLParser|XMLTag)\\b'
-    'name': 'support.class.haxe.flash9.xml'
-  }
-  {
-    'match': '\\b(Array|ArrayAccess|Bool|Class|Date|DateTools|Dynamic|EReg|Enum|Float|Hash|Int|IntHash|IntIter|Iterable|Iterator|Lambda|List|Math|Null|Reflect|Std|String|StringBuf|StringTools|Type|UInt|ValueType|Void|Xml|XmlType)\\b'
-    'name': 'support.class.haxe'
-  }
-  {
-    'match': '\\b(FastCell|FastList|Firebug|Http|Int32|Log|Md5|PosInfos|Public|Resource|Serializer|Stack|StackItem|Template|Timer|TimerQueue|TypeResolver|Unserializer)\\b'
-    'name': 'support.class.haxe.haxe'
-  }
-  {
-    'match': '\\b(Bytes|BytesBuffer|BytesData|BytesInput|BytesOutput|Eof|Error|Input|Output|StringInput)\\b'
-    'name': 'support.class.haxe.io'
-  }
-  {
-    'match': '\\b(AMFConnection|AsyncAdapter|AsyncConnection|AsyncDebugConnection|AsyncProxy|Connection|Context|ContextAll|DelayedConnection|ExternalConnection|FlashJsConnection|HttpAsyncConnection|HttpConnection|LocalConnection|Proxy|Socket|SocketConnection|SocketProtocol|SocketWrapper|SyncSocketConnection)\\b'
-    'name': 'support.class.haxe.haxe.remoting'
-  }
-  {
-    'match': '\\b(CType|ClassField|Classdef|EnumField|Enumdef|Generic|Infos|Path|PathParams|Platforms|Rights|TypeApi|TypeInfos|TypeParams|TypeRoot|TypeTree|Typedef|XmlParser)\\b'
-    'name': 'support.class.haxe.haxe.rtti'
-  }
-  {
-    'match': '\\b(TestCase|TestResult|TestRunner|TestStatus)\\b'
-    'name': 'support.class.haxe.haxe.unit'
-  }
-  {
-    'match': '\\b(Attrib|Check|Fast|Filter|Proxy|Rule)\\b'
-    'name': 'support.class.haxe.haxe.xml'
-  }
-  {
-    'match': '\\b(Anchor|Body|Boot|Button|Checkbox|Document|Dom|Event|FileUpload|Form|FormElement|Frame|Frameset|Hidden|History|HtmlCollection|HtmlDom|IFrame|Image|Lib|Link|Location|MetaDom|Navigator|Option|Password|Radio|Reset|SWFObject|Screen|Select|Selection|Style|StyleSheet|Submit|Text|Textarea|Window|XMLHttpRequest|XMLSocket)\\b'
-    'name': 'support.class.haxe.js'
-  }
-  {
-    'match': '\\b(Boot|FileKind|FileStat|FileSystem|Lib|Random|Sys|Utf8|Web)\\b'
-    'name': 'support.class.haxe.neko'
-  }
-  {
-    'match': '\\b(Connection|Manager|MySql|Object|ResultSet|Sqlite|Transaction)\\b'
-    'name': 'support.class.haxe.neko.db'
-  }
-  {
-    'match': '\\b(File|FileHandle|FileInput|FileOutput|FileSeek|Path|Process)\\b'
-    'name': 'support.class.haxe.neko.io'
-  }
-  {
-    'match': '\\b(Host|Poll|ProxyDetect|Proxysettings|ServerLoop|Socket|SocketHandle|SocketInput|SocketOutput|ThreadRemotingServer|ThreadServer)\\b'
-    'name': 'support.class.haxe.neko.net'
-  }
-  {
-    'match': '\\b(Deque|Gc|Loader|LoaderHandle|Lock|Module|ModuleHandle|Mutex|Thread|ThreadHandle|Tls|Ui)\\b'
-    'name': 'support.class.haxe.neko.vm'
-  }
-  {
-    'match': '\\b(CRC32|Compress|Flush|Reader|Uncompress|Writer|ZipEntry)\\b'
-    'name': 'support.class.haxe.neko.zip'
-  }
-  {
-    'match': '\\b(Boot|CacheLimiter|Exception|FileKind|FileStat|FileSystem|HException|IniHash|Lib|Session|Sys|Utf8|Web)\\b'
-    'name': 'support.class.haxe.php'
-  }
-  {
-    'match': '\\b(Connection|DBase|Field|FieldType|Manager|Mysql|Object|ResultSet|Sqlite)\\b'
-    'name': 'support.class.haxe.php.db'
-  }
-  {
-    'match': '\\b(File|FileHandle|FileInput|FileOutput|FileSeek|Path|Process)\\b'
-    'name': 'support.class.haxe.php.io'
-  }
-  {
-    'match': '\\b(Host|Socket|SocketDomain|SocketHandle|SocketInput|SocketOutput|Process)\\b'
-    'name': 'support.class.haxe.php.net'
-  }
-  {
-    'match': '\\b(HtmlPrinter|Main)\\b'
-    'name': 'support.class.haxe.tools.haxedoc'
-  }
-  {
-    'match': '\\b(Answer|Datas|Developer|Main|Progress|ProgressIn|Project|ProjectInfos|ProjectManager|Remoting_SiteApi|Site|SiteApi|SiteDb|SiteProxy|User|UserInfos|Version|VersionInfos|VersionManager|XmlInfos)\\b'
-    'name': 'support.class.haxe.tools.haxelib'
-  }
-  {
-    'match': '\\b(Main|Progress)\\b'
-    'name': 'support.class.haxe.tools.hxinst'
-  }
-  {
-    'match': '\\b(trace|this|super|untyped)\\b'
-    'name': 'support.function.haxe'
-  }
-  {
-    'match': '\\b__(a|arguments__|construct__|dollar__new|js__|keys__|new__|s|typeof__)\\b'
-    'name': 'support.constant.haxe'
-  }
-  {
-    'match': '\\b(case|cast|catch|default|dynamic|do|else|for|get|if|in|as|new|set|switch|throw|try|type|while|return|break|continue|extern|dynamic|implements|inline|override|private|public|static|import|using|package|var)\\b'
-    'name': 'keyword.control.haxe'
-  }
-  {
-    'match': '\\b(Bool|Float|String|Void|Dynamic|Int|UInt|T)\\b'
+    'match': '(?<!\\.)\\b(class|enum|function|interface|typedef|abstract)(?!\\s*:)\\b'
     'name': 'storage.type.haxe'
   }
   {
-    'match': '\\b(null|true|false)\\b'
+    'match': '(?<!\\.)\\b(async|export|extends|implements|private|protected|public|static|untyped|dynamic)(?!\\s*:)\\b'
+    'name': 'storage.modifier.haxe'
+  }
+  {
+    'match': '(?<!\\.)\\b(let|var)(?!\\s*:)\\b'
+    'name': 'storage.type.var.haxe'
+  }
+  {
+    'begin': '(?<!\\.)\\b(const)(?!\\s*:)\\b'
+    'beginCaptures':
+      '1':
+        'name': 'storage.modifier.haxe'
+    'end': '(\\bof\\b|\\bin\\b)|(;)|(=)|(?<!,)\\n'
+    'endCaptures':
+      '1':
+        'name': 'keyword.operator.$1.haxe'
+      '2':
+        'name': 'punctuation.terminator.statement.haxe'
+      '3':
+        'name': 'keyword.operator.assignment.haxe'
+    'patterns': [
+      {
+        'match': '([$_a-zA-Z][$_a-zA-Z0-9]*)\\s*(:)\\s*([$_a-zA-Z][$_a-zA-Z0-9]*)?'
+        'captures':
+          '2':
+            'name': 'keyword.operator.assignment.haxe'
+          '3':
+            'name': 'constant.other.haxe'
+      }
+      {
+        'match': '([$_a-zA-Z][$_a-zA-Z0-9]*)'
+        'captures':
+          '1':
+            'name': 'constant.other.haxe'
+      }
+      {
+        'match': '\\.\\.\\.'
+        'name': 'keyword.operator.spread.haxe'
+      }
+      {
+        'match': ','
+        'name': 'meta.delimiter.object.comma.haxe'
+      }
+      {
+        'match': '\\(|\\)'
+        'name': 'meta.brace.round.haxe'
+      }
+      {
+        'match': '{|}'
+        'name': 'meta.brace.curly.haxe'
+      }
+      {
+        'match': '\\[|\\]'
+        'name': 'meta.brace.square.haxe'
+      }
+      {
+        'include': '#comments'
+      }
+      {
+        'include': '#metadatas'
+      }
+    ]
+  }
+  {
+    'match': '(?<!\\.)\\b(yield)(?!\\s*:)\\b(?:\\s*(\\*))?|(?<=\\?)(?:\\s*)(yield)(?=\\s*:)',
+    'captures':
+      '1':
+        'name': 'keyword.control.haxe'
+      '2':
+        'name': 'storage.modifier.haxe'
+      '3':
+        'name': 'keyword.control.haxe'
+      '4':
+        'name': 'storage.modifier.haxe'
+    'name': 'meta.control.yield.haxe'
+  }
+  {
+    'match': '(?<!\\.)\\b(await|break|case|catch|continue|do|else|finally|for|in|if|import|from|package|return|switch|throw|try|while|with)(?!\\s*:)\\b'
+    'name': 'keyword.control.haxe'
+  }
+  {
+    'match': '(?<!\\.)\\b(default)\\b'
+    'name': 'keyword.control.haxe'
+  }
+  {
+    'match': '\\.\\.\\.'
+    'name': 'keyword.operator.spread.haxe'
+  }
+  {
+    'match': '(?<!\\.)\\b(true|false)(?!\\s*:)\\b|(?<=\\?)(?:\\s*)(true|false)(?=\\s*:)'
+    'captures':
+      '1':
+        'name': 'constant.language.boolean.$1.haxe'
+      '2':
+        'name': 'constant.language.boolean.$2.haxe'
+  }
+  {
+    'match': '(?<!\\.)\\b(null)(?!\\s*:)\\b|(?<=\\?)(?:\\s*)(null)(?=\\s*:)'
+    'captures':
+      '1':
+        'name': 'constant.language.null.haxe'
+      '2':
+        'name': 'constant.language.null.haxe'
+  }
+  {
+    'match': '(?<!\\.)\\b([A-Z][A-Z0-9_]+)(?!\\s*:)\\b|(?<=\\?)(?:\\s*)([A-Z][A-Z0-9_]+)(?=\\s*:)'
+    'captures':
+      '1':
+        'name': 'constant.other.haxe'
+      '2':
+        'name': 'constant.other.haxe'
+  }
+  {
+    'match': '\\b(Infinity|NaN|undefined)\\b'
     'name': 'constant.language.haxe'
   }
   {
-    'match': '\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\b'
-    'name': 'constant.numeric.haxe'
-  }
-  {
-    'begin': '"'
+    'begin': '(?<=[\\[=(?:+,!]|^|return|=>|&&|\\|\\|)\\s*(/)(?![/*+{}?])(?=.*/)'
     'beginCaptures':
-      '0':
+      '1':
         'name': 'punctuation.definition.string.begin.haxe'
-    'end': '"'
+    'end': '(/)[gimuy]*'
     'endCaptures':
-      '0':
+      '1':
         'name': 'punctuation.definition.string.end.haxe'
-    'name': 'string.quoted.double.haxe'
+    'name': 'string.regexp.haxe'
     'patterns': [
       {
-        'match': '\\\\.'
-        'name': 'constant.character.escape.haxe'
+        'include': 'source.haxe.regexp'
       }
     ]
   }
   {
-    'begin': '\''
-    'beginCaptures':
-      '0':
-        'name': 'punctuation.definition.string.begin.haxe'
-    'end': '\''
-    'endCaptures':
-      '0':
-        'name': 'punctuation.definition.string.end.haxe'
-    'name': 'string.quoted.single.haxe'
-    'patterns': [
-      {
-        'match': '\\\\.'
-        'name': 'constant.character.escape.haxe'
-      }
-    ]
+    'include': '#operators'
   }
   {
-    'begin': '/\\*'
-    'captures':
-      '0':
-        'name': 'punctuation.definition.comment.haxe'
-    'end': '\\*/'
-    'name': 'comment.block.haxe'
+    'include': '#method_calls'
   }
   {
-    'captures':
-      '1':
-        'name': 'punctuation.definition.comment.haxe'
-    'match': '(//).*$\\n?'
-    'name': 'comment.line.double-slash.haxe'
+    'include': '#function_calls'
   }
   {
-    'match': '\\b(instanceof|is|typeof)\\b'
-    'name': 'keyword.operator.haxe'
+    'include': '#numbers'
   }
   {
-    'match': '[-!%&*+=/?:]'
-    'name': 'keyword.operator.symbolic.haxe'
+    'include': '#object_variable'
+  }
+  {
+    'include': '#properties'
+  }
+  {
+    'include': '#types'
+  }
+  {
+    'match': '(?<!\\$)\\b[0-9]+[\\w$]*'
+    'name': 'invalid.illegal.identifier.haxe'
+  }
+  {
+    'match': '\\;'
+    'name': 'punctuation.terminator.statement.haxe'
+  }
+  {
+    'match': ','
+    'name': 'meta.delimiter.object.comma.haxe'
+  }
+  {
+    'match': '\\.'
+    'name': 'meta.delimiter.method.period.haxe'
   }
   {
     'captures':
       '1':
-        'name': 'punctuation.definition.preprocessor.haxe'
-    'match': '^[ \\t]*(#)[a-zA-Z]+'
-    'name': 'meta.preprocessor.haxe'
-  }
-  {
-    'begin': '\\b(function)\\s+([a-zA-Z_]\\w*(?:\\w|>|<|,)*)\\s*(\\()'
-    'captures':
-      '1':
-        'name': 'storage.type.function.haxe'
+        'name': 'punctuation.section.scope.begin.haxe'
       '2':
-        'name': 'entity.name.function.haxe'
-      '3':
-        'name': 'punctuation.definition.parameters.begin.haxe'
+        'name': 'punctuation.section.scope.end.haxe'
+    'comment': 'Allows the special return snippet to fire.'
+    'match': '({)(})'
+  }
+  {
+    'begin': '{'
+    'beginCaptures':
+      '0':
+        'name': 'meta.brace.curly.haxe'
+    'end': '}'
+    'endCaptures':
+      '0':
+        'name': 'meta.brace.curly.haxe'
+    'patterns': [
+      {
+        'include': '$self'
+      }
+    ]
+  }
+  {
+    'begin': '\\('
+    'beginCaptures':
+      '0':
+        'name': 'meta.brace.round.haxe'
     'end': '\\)'
     'endCaptures':
       '0':
-        'name': 'punctuation.definition.parameters.end.haxe'
-    'name': 'meta.function.haxe'
+        'name': 'meta.brace.round.haxe'
     'patterns': [
       {
-        'match': '[^,)\\n]+'
-        'name': 'variable.parameter.function.haxe'
+        'include': '$self'
       }
     ]
   }
   {
-    'captures':
-      '1':
-        'name': 'storage.type.class.haxe'
-      '2':
-        'name': 'entity.name.type.class.haxe'
-      '3':
-        'name': 'storage.modifier.extends.haxe'
-      '4':
-        'name': 'entity.other.inherited-class.haxe'
-    'match': '\\b(class|enum|interface)\\s+([a-zA-Z_](?:\\w|>|<|,)*)(?:\\s+(extends|implements)\\s+([a-zA-Z_](?:\\w|\\.)*)\\s*,?)*'
-    'name': 'meta.class.haxe'
+    'match': '\\[|\\]'
+    'name': 'meta.brace.square.haxe'
   }
   {
-    'captures':
-      '1':
-        'name': 'storage.type.typedef.haxe'
-      '2':
-        'name': 'entity.name.type.class.haxe'
-    'match': '\\b(typedef)\\s+([a-zA-Z_]\\w*)\\s*='
-    'name': 'meta.typedef.haxe'
-  }
-  {
-    'match': '\\b(function)\\b'
-    'name': 'keyword.function.haxe'
+    'match': '\\A#!.*$'
+    'name': 'comment.line.shebang.haxe'
   }
 ]
 'repository':
-  'class-definition':
+  'numbers':
     'patterns': [
       {
+        'match': '\\b(?<!\\$)0(x|X)[0-9a-fA-F]+\\b(?!\\$)'
+        'name': 'constant.numeric.hex.haxe'
+      }
+      {
+        'match': '\\b(?<!\\$)0(b|B)[01]+\\b(?!\\$)'
+        'name': 'constant.numeric.binary.haxe'
+      }
+      {
+        'match': '\\b(?<!\\$)0(o|O)?[0-7]+\\b(?!\\$)'
+        'name': 'constant.numeric.octal.haxe'
+      }
+      {
+        'match': '''(?x)
+          (?<!\\$)(?:
+            (?:\\b[0-9]+(\\.)[0-9]+[eE][+-]?[0-9]+\\b)| # 1.1E+3
+            (?:\\b[0-9]+(\\.)[eE][+-]?[0-9]+\\b)|       # 1.E+3
+            (?:\\B(\\.)[0-9]+[eE][+-]?[0-9]+\\b)|       # .1E+3
+            (?:\\b[0-9]+[eE][+-]?[0-9]+\\b)|            # 1E+3
+            (?:\\b[0-9]+(\\.)[0-9]+\\b)|                # 1.1
+            (?:\\b[0-9]+(\\.)\\B)|                      # 1.
+            (?:\\B(\\.)[0-9]+\\b)|                      # .1
+            (?:\\b[0-9]+\\b(?!\\.))                     # 1
+          )(?!\\$)
+        '''
         'captures':
+          '0':
+            'name': 'constant.numeric.decimal.haxe'
+          '1':
+            'name': 'meta.delimiter.decimal.period.haxe'
           '2':
-            'name': 'storage.type.class.haxe'
+            'name': 'meta.delimiter.decimal.period.haxe'
           '3':
-            'name': 'storage.modifier.class.haxe'
+            'name': 'meta.delimiter.decimal.period.haxe'
           '4':
-            'name': 'entity.name.type.class.haxe'
-        'match': '(?x)\n                                (\\b(class|enum|interface)|\\b(implements|extends))\n                                \\s+(([a-z]+.)*[A-Z]\\w*)'
+            'name': 'meta.delimiter.decimal.period.haxe'
+          '5':
+            'name': 'meta.delimiter.decimal.period.haxe'
+          '6':
+            'name': 'meta.delimiter.decimal.period.haxe'
       }
     ]
-  'comments':
+  'operators':
     'patterns': [
       {
-        'captures':
-          '0':
-            'name': 'punctuation.definition.comment.haxe'
-        'match': '/\\*\\*/'
-        'name': 'comment.block.empty.haxe'
+        'match': '%=|\\+=|-=|\\*=|(?<!\\()/='
+        'name': 'keyword.operator.assignment.compound.haxe'
       }
       {
-        'include': 'text.html.javadoc'
+        'match': '&=|\\^=|<<=|>>=|>>>=|\\|='
+        'name': 'keyword.operator.assignment.compound.bitwise.haxe'
       }
       {
-        'include': '#comments-inline'
-      }
-    ]
-  'comments-inline':
-    'patterns': [
-      {
-        'begin': '/\\*'
-        'captures':
-          '0':
-            'name': 'punctuation.definition.comment.haxe'
-        'end': '\\*/'
-        'name': 'comment.block.haxe'
-      }
-      {
-        'captures':
-          '1':
-            'name': 'comment.line.double-slash.haxe'
-          '2':
-            'name': 'punctuation.definition.comment.haxe'
-        'match': '\\s*((//).*$\\n?)'
-      }
-    ]
-  'constants':
-    'patterns': [
-      {
-        'match': '\\b(true|false|null)\\b'
-        'name': 'constant.language.haxe'
-      }
-      {
-        'match': '\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)\\b'
-        'name': 'constant.numeric.haxe'
-      }
-    ]
-  'constructor':
-    'patterns': [
-      {
-        'captures':
-          '1':
-            'name': 'keyword.other.haxe'
-          '2':
-            'name': 'storage.type.class.haxe'
-        'match': '\\b(new)\\s+(([a-z]+\\.)*[A-Z][\\w\\.\\<\\>]*)'
-      }
-    ]
-  'field-completions':
-    'patterns': [
-      {
-        'begin': '\\.|(?<!if|while|return|for)\\s*\\(\\b'
-        'end': '\\s|\\n|;'
-        'name': 'meta.scope.field-completions.haxe'
-        'patterns': [
-          {
-            'include': '#constants'
-          }
-          {
-            'include': '#strings'
-          }
-          {
-            'include': '#constructor'
-          }
-          {
-            'include': '#keywords'
-          }
-        ]
-      }
-    ]
-  'function-definition':
-    'patterns': [
-      {
-        'captures':
-          '1':
-            'name': 'keyword.other.haxe'
-          '2':
-            'name': 'entity.name.function.haxe'
-        'match': '\\b(function)\\s+([_A-Za-z]\\w*)[<\\w>,]*\\s*\\('
-      }
-    ]
-  'keywords':
-    'patterns': [
-      {
-        'match': '\\b(try|catch|throw)\\b'
-        'name': 'keyword.control.catch-exception.haxe'
-      }
-      {
-        'match': '\\w+\\s*\\?\\s*\\w+\\s*:'
-        'name': 'keyword.control.ternary-if.haxe'
-      }
-      {
-        'captures':
-          '1':
-            'name': 'keyword.control.haxe.flow-control.2'
-        'match': '\\b(if|return|while|for)\\b\\s*\\('
-      }
-      {
-        'match': '\\b(return|break|case|continue|default|do|while|for|switch|if|else)\\b'
-        'name': 'keyword.control.haxe.flow-control.2'
-      }
-      {
-        'match': '(==|!=|<=|>=|<>|<|>)'
+        'match': '!==|!=|<=|>=|===|==|<|>'
         'name': 'keyword.operator.comparison.haxe'
       }
       {
-        'match': '(=)'
-        'name': 'keyword.operator.assignment.haxe'
-      }
-      {
-        'match': '(\\.\\.\\.)'
-        'name': 'keyword.control.directive.haxe'
-      }
-      {
-        'match': '(\\-\\-|\\+\\+)'
-        'name': 'keyword.operator.increment-decrement.haxe'
-      }
-      {
-        'match': '(\\-|\\+|\\*|\\/|%)'
-        'name': 'keyword.operator.arithmetic.haxe'
-      }
-      {
-        'match': '(!|&&|\\|\\|)'
+        'match': '&&|!|\\|\\|'
         'name': 'keyword.operator.logical.haxe'
       }
       {
-        'match': '\\b(cast|untyped)\\b'
-        'name': 'keyword.other.untyped.haxe'
+        'match': '&|\\||\\^|~'
+        'name': 'keyword.operator.bitwise.haxe'
       }
       {
-        'match': '\\btrace\\b'
-        'name': 'keyword.other.trace.haxe'
+        'match': '\\?|:'
+        'name': 'keyword.operator.haxe'
       }
       {
-        'captures':
-          '1':
-            'name': 'keyword.control.directive.conditional.haxe'
-        'match': '(#if\\s+([\\!\\w]+|(\\([^\\)]*\\))))'
+        'match': '='
+        'name': 'keyword.operator.assignment.haxe'
       }
       {
-        'match': '(#end|#else|#elseif)\\b'
-        'name': 'keyword.control.directive.conditional.haxe'
+        'match': '--'
+        'name': 'keyword.operator.decrement.haxe'
       }
       {
-        'match': ';'
-        'name': 'punctuation.terminator.haxe'
+        'match': '\\+\\+'
+        'name': 'keyword.operator.increment.haxe'
       }
       {
-        'match': '\\b(this|super)\\b'
-        'name': 'variable.language.haxe'
-      }
-      {
-        'match': '\\b(var|new)\\b'
-        'name': 'keyword.other.variable.haxe'
-      }
-      {
-        'match': '\\b__(init|instanceof|string_rec)\\b'
-        'name': 'support.variable.magic.haxe'
-      }
-      {
-        'match': '\\bprototype\\b'
-        'name': 'support.variable.magic.haxe'
-      }
-      {
-        'match': '\\b__(init|name|ename|super|unprotect|constructs|class|enum)__\\b'
-        'name': 'support.variable.magic.haxe'
-      }
-      {
-        'match': '\\b(Array|ArrayAccess|Bool|Class|Date|DateTools|Dynamic|EReg|Enum|Float|Hash|Int|IntHash|IntIter|Iterable|Iterator|Lambda|List|Math|Null|Reflect|Std|String|StringBuf|StringTools|Type|UInt|ValueType|Void|Xml|XmlType|TBool|TInt|TFloat|TFunction|TObject|TEnum|TClass|TNull|TUnknown)\\b'
-        'name': 'support.class.haxe'
-      }
-      {
-        'include': '#storage'
-      }
-      {
-        'captures':
-          '1':
-            'name': 'entity.name.type.package.haxe'
-          '2':
-            'name': 'entity.name.type.class.haxe'
-        'match':  '(\\b(([a-z][a-zA-Z0-9]*\\.)*)([A-Z]\\w*|\\*))'
-      }
-    ]
-  'regex':
-    'patterns': [
-      {
-        'captures': {}
-        'match': '~/([^/]+)/'
-      }
-    ]
-  'storage':
-    'patterns': [
-      {
-        'match': '((@:)(abstract|access|allow|annotation|arrayAccess|autoBuild|bind|bitmap|build|buildXml|classCode|commutative|compilerGenerated|coreApi|coreType|cppFileCode|cppNamespaceCode|dce|debug|decl|defParam|delegate|depend|deprecated|event|expose|extern|fakeEnum|file|final|font|forward|from|functionCode|functionTailCode|generic|genericBuild|getter|hack|headerCode|headerNamespaceCode:|hxGen|ifFeature|include|initPackage|internal|isVar|keep|keepInit|keepSub|macro|meta|multiType|native|nativeGen|noCompletion|noDebug|noDoc|noImportGlobal|noPackageRestrict|noStack|noUsing|notNull|ns|op|optional|overload|privateAccess|property|protected|public|publicFields|readOnly|remove|require|rtti|runtime|runtimeValue|setter|sound|struct|suppressWarnings|throws|to|transient|unbound|unifyMinDynamic|unreflective|unsafe|usage|volatile)\\b)'
-        'name': 'storage.modifier.macro.haxe'
-      }
-      {
-        'match': '\\b(public|private|static|dynamic|inline|extern|typedef|override|abstract)\\b'
-        'name': 'storage.modifier.haxe'
-      }
-      {
-        'match': '\\bpackage\\b'
-        'name': 'storage.type.package.haxe'
-      }
-      {
-        'match': '\\b(import|using)\\b'
-        'name': 'storage.type.import.haxe'
+        'match': '%|\\*|/|-|\\+'
+        'name': 'keyword.operator.haxe'
       }
     ]
   'strings':
@@ -617,8 +677,27 @@
             'match': '\\\\.'
             'name': 'constant.character.escape.haxe'
           }
+        ]
+      }
+      {
+        'begin': '(@(?:jsx|tpl|template|xml|html|dom)) *(")'
+        'beginCaptures':
+          '1':
+            'name': 'constant.other.symbol.metadata.haxe'
+          '2':
+            'name': 'comment.haxe'
+        'end': '(")'
+        'endCaptures':
+          '1':
+            'name': 'comment.haxe'
+        'name': 'meta.jsx.haxe'
+        'patterns': [
           {
-            'include': '#embedded-xml'
+            'match': '\\\\.'
+            'name': 'constant.character.escape.haxe'
+          }
+          {
+            'include': '#jsx'
           }
         ]
       }
@@ -637,178 +716,525 @@
             'match': '\\\\.'
             'name': 'constant.character.escape.haxe'
           }
+        ]
+      }
+      {
+        'begin': '(@(?:jsx|tpl|template|xml|html|dom)) *(\')'
+        'beginCaptures':
+          '1':
+            'name': 'constant.other.symbol.metadata.haxe'
+          '2':
+            'name': 'comment.haxe'
+        'end': '(\')'
+        'endCaptures':
+          '1':
+            'name': 'comment.haxe'
+        'name': 'meta.jsx.haxe'
+        'patterns': [
           {
-            'include': '#embedded-xml'
+            'match': '\\\\.'
+            'name': 'constant.character.escape.haxe'
+          }
+          {
+            'include': '#jsx'
+          }
+        ]
+      }
+      {
+        'begin': '(jsx|_) *\\( *(\')'
+        'beginCaptures':
+          '1':
+            'name': 'support.function.haxe'
+          '2':
+            'name': 'comment.haxe'
+        'end': '(\') *\\)'
+        'endCaptures':
+          '1':
+            'name': 'comment.haxe'
+        'name': 'meta.jsx.haxe'
+        'patterns': [
+          {
+            'match': '\\\\.'
+            'name': 'constant.character.escape.haxe'
+          }
+          {
+            'include': '#jsx'
+          }
+        ]
+      }
+      {
+        'begin': '(jsx|_) *\\( *(")'
+        'beginCaptures':
+          '1':
+            'name': 'support.function.haxe'
+          '2':
+            'name': 'comment.haxe'
+        'end': '(") *\\)'
+        'endCaptures':
+          '1':
+            'name': 'comment.haxe'
+        'name': 'meta.jsx.haxe'
+        'patterns': [
+          {
+            'match': '\\\\.'
+            'name': 'constant.character.escape.haxe'
+          }
+          {
+            'include': '#jsx'
           }
         ]
       }
     ]
-  'embedded-xml-tag-attributes':
+  'jsx-tag-attributes':
     'patterns': [
       {
-        'include': '#embedded-xml-tag-attribute-name'
+        'include': '#jsx-tag-attribute-name'
       }
       {
-        'include': '#embedded-xml-string-double-quoted'
+        'include': '#jsx-string-double-quoted'
       }
       {
-        'include': '#embedded-xml-string-single-quoted'
+        'include': '#jsx-string-single-quoted'
       }
       {
-        'include': '#embedded-xml-curly-double'
-      }
-      {
-        'include': '#embedded-xml-curly-simple'
+        'include': '#jsx-evaluated-code'
       }
     ]
-  'embedded-xml-tag-attribute-name':
-    'name': 'meta.tag.attribute-name.haxe'
+  'jsx-tag-attribute-name':
+    'name': 'meta.tag.attribute-name.js'
     'match': '\\b([a-zA-Z0-9\\-:]+)'
     'captures':
       '1':
-        'name': 'entity.other.attribute-name.haxe'
-  'embedded-xml-string-double-quoted':
+        'name': 'entity.other.attribute-name.js'
+  'jsx-string-double-quoted':
     'begin': '"'
     'end': '"'
-    'name': 'string.quoted.double.haxe'
+    'name': 'string.quoted.double.js'
     'endCaptures':
       '0':
-        'name': 'punctuation.definition.string.end.haxe'
+        'name': 'punctuation.definition.string.end.js'
     'beginCaptures':
       '0':
-        'name': 'punctuation.definition.string.begin.haxe'
+        'name': 'punctuation.definition.string.begin.js'
     'patterns': [
       {
-        'include': '#embedded-xml-entities'
-      }
-      {
-        'include': '#embedded-xml-curly-double'
-      }
-      {
-        'include': '#embedded-xml-curly-simple'
+        'include': '#jsx-entities'
       }
     ]
-  'embedded-xml-string-single-quoted':
+  'jsx-string-single-quoted':
     'begin': '\''
     'end': '\''
-    'name': 'string.quoted.single.haxe'
+    'name': 'string.quoted.single.js'
     'endCaptures':
       '0':
-        'name': 'punctuation.definition.string.end.haxe'
+        'name': 'punctuation.definition.string.end.js'
     'beginCaptures':
       '0':
-        'name': 'punctuation.definition.string.begin.haxe'
+        'name': 'punctuation.definition.string.begin.js'
     'patterns': [
       {
-        'include': '#embedded-xml-entities'
-      }
-      {
-        'include': '#embedded-xml-curly-double'
-      }
-      {
-        'include': '#embedded-xml-curly-simple'
+        'include': '#jsx-entities'
       }
     ]
-  'embedded-xml-entities':
+  'jsx-entities':
     'patterns': [
       {
-        'name': 'constant.character.entity.haxe'
+        'name': 'constant.character.entity.js'
         'match': '(&)([a-zA-Z0-9]+|#[0-9]+|#x[0-9a-fA-F]+)(;)'
         'captures':
           '1':
-            'name': 'punctuation.definition.entity.haxe'
+            'name': 'punctuation.definition.entity.js'
           '3':
-            'name': 'punctuation.definition.entity.haxe'
+            'name': 'punctuation.definition.entity.js'
       }
       {
-        'name': 'invalid.illegal.bad-ampersand.haxe'
+        'name': 'invalid.illegal.bad-ampersand.js'
         'match': '&'
       }
     ]
-  'embedded-xml-curly-simple':
+  'jsx-evaluated-code':
     'begin': '{'
     'end': '}'
-    'name': 'meta.tag.brace.curly.simple.haxe'
+    'name': 'meta.brace.curly.js'
     'endCaptures':
       '0':
-        'name': 'punctuation.definition.brace.curly.simple.end.haxe'
+        'name': 'punctuation.definition.brace.curly.end.js'
     'beginCaptures':
       '0':
-        'name': 'punctuation.definition.brace.curly.simple.start.haxe'
-  'embedded-xml-curly-double':
-    'begin': '{{'
-    'end': '}}'
-    'name': 'meta.tag.brace.curly.double.haxe'
-    'endCaptures':
-      '0':
-        'name': 'punctuation.definition.brace.curly.double.end.haxe'
-    'beginCaptures':
-      '0':
-        'name': 'punctuation.definition.brace.curly.double.start.haxe'
-  'embedded-xml-tag-open':
-    'begin': '(<)([a-zA-Z0-9\.:$_]+)'
-    'end': '(/?>)()'
-    'name': 'meta.tag.open.block.any.html.haxe'
-    'endCaptures':
-      '1':
-        'name': 'punctuation.definition.tag.end.haxe'
-    'beginCaptures':
-      '1':
-        'name': 'punctuation.definition.tag.begin.haxe'
-      '2':
-        'name': 'entity.name.tag.haxe'
+        'name': 'punctuation.definition.brace.curly.start.js'
     'patterns': [
       {
-        'include': '#embedded-xml-tag-attributes'
+        'include': '$self'
       }
     ]
-  'embedded-xml-tag-close':
-    'match': '(</)([^>]+)(>)'
-    'name': 'meta.tag.closed.block.any.html.haxe'
-    'captures':
+  'jsx-tag-open':
+    'begin': '(<)([a-zA-Z0-9\.:$_]+)'
+    'end': '(/?>)'
+    'name': 'tag.open.js'
+    'endCaptures':
       '1':
-        'name': 'punctuation.definition.tag.begin.haxe'
+        'name': 'punctuation.definition.tag.end.js'
+    'beginCaptures':
+      '1':
+        'name': 'punctuation.definition.tag.begin.js'
       '2':
-        'name': 'entity.name.tag.haxe'
-      '3':
-        'name': 'punctuation.definition.tag.end.haxe'
-  'embedded-xml-inner-text':
-    'match': '([^<{]+)'
-    'name': 'meta.tag.inner.text.haxe'
-  'embedded-xml-tag-invalid':
-    'name': 'invalid.illegal.tag.incomplete.haxe'
-    'match': '<\\s*>'
-  'embedded-xml-comments':
+        'name': 'entity.name.tag.js'
     'patterns': [
       {
-        'begin': '<!--'
+        'include': '#jsx-tag-attributes'
+      }
+    ]
+  'jsx-tag-close':
+    'match': '(</)([^>]+)(>)'
+    'name': 'tag.closed.js'
+    'captures':
+      '1':
+        'name': 'punctuation.definition.tag.begin.js'
+      '2':
+        'name': 'entity.name.tag.js'
+      '3':
+        'name': 'punctuation.definition.tag.end.js'
+  'jsx-tag-invalid':
+    'name': 'invalid.illegal.tag.incomplete.js'
+    'match': '<\\s*>'
+  'jsx':
+    'name': 'meta.jsx.haxe'
+    'patterns': [
+      {
+        'include': '#jsx-tag-open'
+      }
+      {
+        'include': '#jsx-tag-close'
+      }
+      {
+        'include': '#jsx-tag-invalid'
+      }
+    ]
+  'function_params':
+    'patterns': [
+      {
+        'begin': '\\('
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.parameters.begin.bracket.round.haxe'
+        'end': '\\)'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.definition.parameters.end.bracket.round.haxe'
+        'name': 'meta.parameters.haxe'
+        'patterns': [
+          {
+            'match': '(\\.\\.\\.)([a-zA-Z_$][\\w$]*)'
+            'captures':
+              '1':
+                'name': 'keyword.operator.spread.haxe'
+              '2':
+                'name': 'variable.parameter.rest.function.haxe'
+          }
+          {
+            'include': '$self'
+          }
+          {
+            'match': '[a-zA-Z_$][\\w$]*'
+            'name': 'variable.parameter.function.haxe'
+          }
+        ]
+      }
+    ]
+  'function_body':
+    'patterns': [
+      {
+        'begin': '{'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.function.body.begin.bracket.curly.haxe'
+        'end': '}'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.definition.function.body.end.bracket.curly.haxe'
+        'patterns': [
+          {
+            'include': '$self'
+          }
+        ]
+      }
+    ]
+  'function_innards':
+    'patterns': [
+      {
+        'match': '(?:\\b(async)\\b\\s*)?\\b(function)\\b(?:\\s*(\\*))?'
+        'captures':
+          '1':
+            'name': 'storage.modifier.async.haxe'
+          '2':
+            'name': 'storage.type.function.haxe'
+          '3':
+            'name': 'storage.modifier.generator.haxe'
+      }
+      {
+        'match': '[a-zA-Z_$][\\w$]*(?=\\s*\\()'
+        'name': 'entity.name.function.haxe'
+      }
+      {
+        'include': '#function_params'
+      }
+      {
+        'include': '#comments'
+      }
+      {
+        'include': '#metadatas'
+      }
+    ]
+  'arrow_function_innards':
+    'patterns': [
+      {
+        'match': '=>'
+        'name': 'storage.type.function.arrow.haxe'
+      }
+      {
+        'include': '#function_params'
+      }
+      {
+        'match': '([a-zA-Z_$][\\w$]*)(?=\\s*=>)'
+        'captures':
+          '0':
+            'name': 'meta.parameters.haxe'
+          '1':
+            'name': 'variable.parameter.function.haxe'
+      }
+      {
+        'match': '(\\d[\\w$]*)'
+        'captures':
+          '0':
+            'name': 'meta.parameters.haxe'
+          '1':
+            'name': 'invalid.illegal.identifier.haxe'
+      }
+    ]
+  'arguments':
+    'patterns': [
+      {
+        'begin': '\\('
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.arguments.begin.bracket.round.haxe'
+        'end': '\\)'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.definition.arguments.end.bracket.round.haxe'
+        'name': 'meta.arguments.haxe'
+        'patterns': [
+          {
+            'include': '$self'
+          }
+        ]
+      }
+    ]
+  'method_calls':
+    'patterns': [
+      {
+        # .methodCall(arg1, "arg2", [...])
+        'begin': '(\\.)\\s*([\\w$]+)\\s*(?=\\()'
+        'beginCaptures':
+          '1':
+            'name': 'meta.delimiter.method.period.haxe'
+          '2':
+            'patterns': [
+              {
+                'match': "[a-zA-Z_$][\\w$]*"
+                'name': 'entity.name.function.haxe'
+              }
+              {
+                'match': '\\d[\\w$]*'
+                'name': 'invalid.illegal.identifier.haxe'
+              }
+            ]
+        'end': '(?<=\\))'
+        'name': 'meta.method-call.haxe'
+        'patterns': [
+          {
+            'include': '#arguments'
+          }
+        ]
+      }
+    ]
+  'function_calls':
+    'patterns': [
+      {
+        # functionCall(arg1, "arg2", [...])
+        'begin': '([\\w$]+)\\s*(?=\\()'
+        'beginCaptures':
+          '1':
+            'patterns': [
+              {
+                'match': '''(?x)
+                  \\b(trace)\\b
+                '''
+                'name': 'support.function.haxe'
+              }
+              {
+                'match': "[a-zA-Z_$][\\w$]*"
+                'name': 'entity.name.function.haxe'
+              }
+              {
+                'match': '\\d[\\w$]*'
+                'name': 'invalid.illegal.identifier.haxe'
+              }
+            ]
+        'end': '(?<=\\))'
+        'name': 'meta.function-call.haxe'
+        'patterns': [
+          {
+            'include': '#arguments'
+          }
+        ]
+      }
+    ]
+  'object_variable':
+    'patterns': [
+      {
+        'comment': '`obj` in `obj.prop`, `obj.methodCall()`'
+        'match': '(?:([A-Z][\\w$]*)|([a-zA-Z_$][\\w$]*)|(\\d\\w*))(?=\\s*\\.\\s*[a-zA-Z_$]\\w*)'
+        'captures':
+          '1':
+            'name': 'entity.name.type.haxe'
+          '2':
+            'name': 'variable.other.object.haxe'
+          '3':
+            'name': 'invalid.illegal.identifier.haxe'
+      }
+    ]
+  'properties':
+    'patterns': [
+      {
+        'comment': '`prop` in `obj.prop`, `func().prop`'
+        'match': '(\\.)\\s*(?:([0-9]+[\\w$]*)|([A-Z][A-Z0-9_$]*\\b\\$*)|(\\$*[A-Z][\\w$]*)|(\\$*[a-zA-Z_$][\\w$]*(?=\\.|\\[))|(\\$*[a-zA-Z_$][\\w$]*))'
+        'captures':
+          '1':
+            'name': 'meta.delimiter.property.period.haxe'
+          '2':
+            'name': 'invalid.illegal.identifier.haxe'
+          '3':
+            'name': 'constant.other.property.haxe'
+          '4':
+            'name': 'entity.name.type.haxe'
+          '5':
+            'name': 'variable.other.property.haxe'
+      }
+    ]
+  'metadatas':
+    'patterns': [
+      'match': '(@\\:?[a-zA-Z_$][\\w$]*\\b\\s*)'
+      'captures':
+        '0':
+          'name': 'constant.other.symbol.metadata.haxe'
+    ]
+  'parents':
+    'patterns': [
+      {
+        'match': '(\\bextends\\b|\\bimplements\\b)\\s+'
+        'captures':
+          '1':
+            'name': 'storage.modifier.haxe'
+      }
+    ]
+  'types':
+    'patterns': [
+      {
+        'match': '(\\b[A-Z][\\w$]*)'
+        'captures':
+          '1':
+            'name': 'entity.name.type.haxe'
+      }
+    ]
+  'interpolated_js':
+    'patterns': [
+      {
+        'begin': '\\$\\{'
+        'captures':
+          '0':
+            'name': 'punctuation.section.embedded.haxe'
+        'end': '\\}'
+        'name': 'source.haxe.embedded.source'
+        'patterns': [
+          {
+            'begin': '{'
+            'beginCaptures':
+              '0':
+                'name': 'meta.brace.curly.haxe'
+            'end': '}'
+            'endCaptures':
+              '0':
+                'name': 'meta.brace.curly.haxe'
+            'patterns': [
+              {
+                'include': '$self'
+              }
+            ]
+          }
+          {
+            'include': '$self'
+          }
+        ]
+      }
+    ]
+  'docblock':
+    'patterns': [
+      {
+        'match': '(?<!\\w)@(abstract|access|alias|augments|author|async|attribute|arg|argument|beta|borrows|bubbes|callback|class|classdesc|config|const|constant|constructs|constructor|copyright|chainable|default|defaultvalue|deprecated|desc|description|enum|emits|event|example|exports|external|extends|extension|extensionfor|extension_for|for|file|fileoverview|fires|final|function|global|host|ignore|implements|inheritdoc|inner|instance|interface|kind|lends|license|listens|main|member|memberof|method|mixex|mixin(?:s|)|module|name|namespace|override|overview|param|private|prop|property|protected|readonly|readOnly|requires|required|return|returns|see|since|static|summary|submodule|this|throws|todo|tutorial|type|typedef|var|variation|version|virtual|uses|writeOnce)\\b'
+        'name': 'storage.type.class.haxedoc'
+      }
+      {
+        'match': '({\\b(?:[a-zA-Z_$][a-zA-Z_$0-9]*)\\b})\\s\\b([a-zA-Z_$][a-zA-Z_$0-9]*)\\b\\s*((?:(?!\\*\\/).)*)'
+        'captures':
+            0:
+              'name': 'other.meta.haxedoc'
+            1:
+              'name': 'entity.name.type.instance.haxedoc'
+            2:
+              'name': 'variable.other.haxedoc'
+            3:
+              'name': 'other.description.haxedoc'
+      }
+    ]
+  'comments':
+    'patterns': [
+      {
+        'begin': '/\\*\\*(?!/)'
         'captures':
           '0':
             'name': 'punctuation.definition.comment.haxe'
-        'end': '-->'
-        'name': 'comment.block.haxe.embedded.xml'
+        'patterns': [
+          {
+            'include': '#docblock'
+          }
+        ]
+        'end': '\\*/'
+        'name': 'comment.block.documentation.haxe'
+      }
+      {
+        'begin': '/\\*'
+        'captures':
+          '0':
+            'name': 'punctuation.definition.comment.haxe'
+        'end': '\\*/'
+        'name': 'comment.block.haxe'
+      }
+      {
+        'begin': '(^[ \\t]+)?(?=//)'
+        'beginCaptures':
+          '1':
+            'name': 'punctuation.whitespace.comment.leading.haxe'
+        'end': '(?!\\G)'
+        'patterns': [
+          {
+            'begin': '//'
+            'beginCaptures':
+              '0':
+                'name': 'punctuation.definition.comment.haxe'
+            'end': '\\n'
+            'name': 'comment.line.double-slash.haxe'
+          }
+        ]
       }
     ]
-  'embedded-xml':
-    'name': 'meta.embedded-xml.haxe'
-    'patterns': [
-      {
-        'include': '#embedded-xml-tag-open'
-      }
-      {
-        'include': '#embedded-xml-tag-close'
-      }
-      {
-        'include': '#embedded-xml-curly-double'
-      }
-      {
-        'include': '#embedded-xml-comments'
-      }
-      {
-        'include': '#embedded-xml-curly-simple'
-      }
-      {
-        'include': '#embedded-xml-tag-invalid'
-      }
-    ]
-'scopeName': 'source.haxe'
