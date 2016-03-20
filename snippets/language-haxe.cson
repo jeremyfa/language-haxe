@@ -102,7 +102,7 @@
     'prefix': 'xml'
     'body': '-xml ${1:file}'
 
-'.source.haxe':
+'.source.hx':
 
   'main class':
     'prefix': 'class'
