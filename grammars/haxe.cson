@@ -713,6 +713,9 @@
         'name': 'string.quoted.single.haxe'
         'patterns': [
           {
+            'include': '#string_interpolations'
+          }
+          {
             'match': '\\\\.'
             'name': 'constant.character.escape.haxe'
           }
@@ -1147,8 +1150,14 @@
             'name': 'entity.name.type.haxe'
       }
     ]
-  'interpolated_js':
+  'string_interpolations':
     'patterns': [
+      {
+        'match': '(\\$)([a-zA-Z_][a-zA-Z0-9_]*)'
+        'captures':
+          '0':
+            'name': 'constant.other.name.embedded.haxe'
+      }
       {
         'begin': '\\$\\{'
         'captures':
