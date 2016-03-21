@@ -55,5 +55,5 @@
   'editor':
     'commentStart': '// '
     'foldEndPattern': '^\\s*\\}|^\\s*\\]|^\\s*\\)'
-    'increaseIndentPattern': '(?x)\n\t\t(\n\t\t\t\\{ [^}"\']*\n\t\t|\t\\( [^)"\']*\n\t\t|\tcase[\\s\\S]*:\n\t\t|\tdefault:\n\t\t)\n\t\t$\n\t'
+    'increaseIndentPattern': '(\\{[^}"\']*|\\[[^\\]"\']*|\\([^)"\']*|case[\\s\\S]*:|default:)\\s*$'
     'decreaseIndentPattern': '^\\s*(\\s*/[*].*[*]/\\s*)*[}\\])]'
