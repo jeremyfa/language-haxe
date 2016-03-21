@@ -60,213 +60,10 @@
         'name': 'variable.language.haxe'
   }
   {
-    # [param|(params)] => [expression|{statements}]
-    'begin': '''(?x)
-      (?=
-        (?<![A-Za-z0-9])
-        ((\\(([^\\(\\)]*)?\\))|[\\w$]+)
-        \\s*=>
-      )
-    '''
-    'end': '''(?x)
-      (?<=})|
-      ((?!
-        \\s*{|
-        \\G\\(|
-        \\G[\\w$]+|
-        \\s*/\\*|\\s*//
-      )(?=\\s*\\S))
-    '''
-    'patterns': [
-      {
-        'include': '#comments'
-      }
-      {
-        'include': '#metadatas'
-      }
-      {
-        'include': '#function_body'
-      }
-      {
-        'begin': '\\G'
-        'end': '(?<=(=>))'
-        'name': 'meta.function.arrow.haxe'
-        'patterns': [
-          {
-            'include': '#arrow_function_innards'
-          }
-        ]
-      }
-    ]
-  }
-  {
-    # [.]foo = ... => ...
-    'begin': '''(?x)
-      (?=
-        (\\.)?[a-zA-Z_$][\\w$]*
-        \\s*(=)\\s*
-        ((\\(([^\\(\\)]*)?\\))|[\\w$]+)
-        \\s*=>
-      )
-    '''
-    'end': '''(?x)
-      (?<=})|
-      ((?!
-        \\s*{|
-        \\G(\\.)?[a-zA-Z_$][\\w$]*\\s*(=)\\s*\\(|
-        \\G(\\.)?[a-zA-Z_$][\\w$]*\\s*(=)\\s*[\\w$]+|
-        \\s*/\\*|\\s*//
-      )(?=\\s*\\S))
-    '''
-    'patterns': [
-      {
-        'include': '#comments'
-      }
-      {
-        'include': '#metadatas'
-      }
-      {
-        'include': '#function_body'
-      }
-      {
-        'begin': '\\G'
-        'end': '(?<=(=>))'
-        'name': 'meta.function.arrow.haxe'
-        'patterns': [
-          {
-            'match': '\\G(\\.)?([a-zA-Z_$][\\w$]*)\\s*(=)'
-            'captures':
-              '1':
-                'name': 'meta.delimiter.method.period.haxe'
-              '2':
-                'name': 'entity.name.function.haxe'
-              '3':
-                'name': 'keyword.operator.assignment.haxe'
-          }
-          {
-            'include': '#arrow_function_innards'
-          }
-        ]
-      }
-    ]
-  }
-  {
-    # foo: ... => ...
-    'begin': '''(?x)
-      (?=
-        \\b[a-zA-Z_$][\\w$]*
-        \\s*:\\s*
-        ((\\(([^\\(\\)]*)?\\))|[\\w$]+)
-        \\s*=>
-      )
-    '''
-    'end': '''(?x)
-      (?<=})|
-      ((?!
-        \\s*{|
-        \\G[\\w$]+:|
-        \\s*/\\*|\\s*//
-      )(?=\\s*\\S))
-    '''
-    'patterns': [
-      {
-        'include': '#comments'
-      }
-      {
-        'include': '#metadatas'
-      }
-      {
-        'include': '#function_body'
-      }
-      {
-        'begin': '\\G'
-        'end': '(?<=(=>))'
-        'name': 'meta.function.arrow.json.haxe'
-        'patterns': [
-          {
-            'match': '\\b([a-zA-Z_$][\\w$]*)\\s*(:)\\s*'
-            'captures':
-              '1':
-                'name': 'entity.name.function.haxe'
-              '2':
-                'name': 'keyword.operator.assignment.haxe'
-          }
-          {
-            'include': '#arrow_function_innards'
-          }
-        ]
-      }
-    ]
-  }
-  {
-    # "foo": ... => ...
-    'begin': '''(?x)
-      (?=
-        ((\'[^\']*?\')|("[^"]*?"))
-        \\s*:\\s*
-        ((\\(([^\\(\\)]*)?\\))|[\\w$]+)
-        \\s*=>
-      )
-    '''
-    'end': '''(?x)
-      (?<=})|
-      ((?!
-        \\G((\'[^\']*?\')|("[^"]*?"))|
-        \\s*{|
-        \\s*/\\*|\\s*//
-      )(?=\\s*\\S))
-    '''
-    'patterns': [
-      {
-        'include': '#comments'
-      }
-      {
-        'include': '#metadatas'
-      }
-      {
-        'include': '#function_body'
-      }
-      {
-        'begin': '\\G'
-        'end': '(?<=(=>))'
-        'name': 'meta.function.arrow.json.haxe'
-        'patterns': [
-          {
-            'match': '(?:((\')([^\']*?)(\'))|((")([^"]*?)(")))\\s*(:)'
-            'captures':
-              '1':
-                'name': 'string.quoted.single.haxe'
-              '2':
-                'name': 'punctuation.definition.string.begin.haxe'
-              '3':
-                'name': 'entity.name.function.haxe'
-              '4':
-                'name': 'punctuation.definition.string.end.haxe'
-              '5':
-                'name': 'string.quoted.double.haxe'
-              '6':
-                'name': 'punctuation.definition.string.begin.haxe'
-              '7':
-                'name': 'entity.name.function.haxe'
-              '8':
-                'name': 'punctuation.definition.string.end.haxe'
-              '9':
-                'name': 'keyword.operator.assignment.haxe'
-          }
-          {
-            'include': '#arrow_function_innards'
-          }
-        ]
-      }
-    ]
-  }
-  {
     'match': '(=>)'
     'captures':
       '0':
-        'name': 'meta.function.arrow.haxe'
-      '1':
-        'name': 'storage.type.function.arrow.haxe'
+        'name': 'meta.operator.arrow.haxe'
   }
   {
     'begin': '''(?x)
@@ -344,10 +141,7 @@
   }
   {
     'begin': '(?:#if|#else|#elseif|#end)'
-    'beginCaptures':
-      '0':
-        'name': 'constant.variable.conditional.haxe'
-    'name': 'constant.variable.conditional.haxe'
+    'name': 'constant.variable.conditional.keyword.control.directive.haxe'
     'end': '(?=$)'
   }
   {
@@ -355,89 +149,24 @@
     'name': 'storage.type.haxe'
   }
   {
-    'match': '(?<!\\.)\\b(async|export|extends|implements|private|protected|public|static|untyped|dynamic)(?!\\s*:)\\b'
+    'match': '(?<!\\.)\\b(extends|implements|private|protected|public|static|dynamic|override)(?!\\s*:)\\b'
     'name': 'storage.modifier.haxe'
   }
   {
-    'match': '(?<!\\.)\\b(let|var)(?!\\s*:)\\b'
+    'match': '(?<!\\.)\\b(var)(?!\\s*:)\\b'
     'name': 'storage.type.var.haxe'
   }
   {
-    'begin': '(?<!\\.)\\b(const)(?!\\s*:)\\b'
-    'beginCaptures':
-      '1':
-        'name': 'storage.modifier.haxe'
-    'end': '(\\bof\\b|\\bin\\b)|(;)|(=)|(?<!,)\\n'
-    'endCaptures':
-      '1':
-        'name': 'keyword.operator.$1.haxe'
-      '2':
-        'name': 'punctuation.terminator.statement.haxe'
-      '3':
-        'name': 'keyword.operator.assignment.haxe'
-    'patterns': [
-      {
-        'match': '([$_a-zA-Z][$_a-zA-Z0-9]*)\\s*(:)\\s*([$_a-zA-Z][$_a-zA-Z0-9]*)?'
-        'captures':
-          '2':
-            'name': 'keyword.operator.assignment.haxe'
-          '3':
-            'name': 'constant.other.haxe'
-      }
-      {
-        'match': '([$_a-zA-Z][$_a-zA-Z0-9]*)'
-        'captures':
-          '1':
-            'name': 'constant.other.haxe'
-      }
-      {
-        'match': '\\.\\.\\.'
-        'name': 'keyword.operator.spread.haxe'
-      }
-      {
-        'match': ','
-        'name': 'meta.delimiter.object.comma.haxe'
-      }
-      {
-        'match': '\\(|\\)'
-        'name': 'meta.brace.round.haxe'
-      }
-      {
-        'match': '{|}'
-        'name': 'meta.brace.curly.haxe'
-      }
-      {
-        'match': '\\[|\\]'
-        'name': 'meta.brace.square.haxe'
-      }
-      {
-        'include': '#comments'
-      }
-      {
-        'include': '#metadatas'
-      }
-    ]
-  }
-  {
-    'match': '(?<!\\.)\\b(yield)(?!\\s*:)\\b(?:\\s*(\\*))?|(?<=\\?)(?:\\s*)(yield)(?=\\s*:)',
-    'captures':
-      '1':
-        'name': 'keyword.control.haxe'
-      '2':
-        'name': 'storage.modifier.haxe'
-      '3':
-        'name': 'keyword.control.haxe'
-      '4':
-        'name': 'storage.modifier.haxe'
-    'name': 'meta.control.yield.haxe'
-  }
-  {
-    'match': '(?<!\\.)\\b(await|break|case|catch|continue|do|else|finally|for|in|if|import|from|package|return|switch|throw|try|while|with)(?!\\s*:)\\b'
+    'match': '(?<!\\.)\\b(untyped|cast|break|case|catch|continue|do|else|finally|for|in|if|import|from|package|return|switch|throw|try|while|with)(?!\\s*:)\\b'
     'name': 'keyword.control.haxe'
   }
   {
     'match': '(?<!\\.)\\b(default)\\b'
     'name': 'keyword.control.haxe'
+  }
+  {
+    'match': '\\$(?:[A-Za-z0-9_]+\\b)?'
+    'name': 'support.variable.macro.haxe'
   }
   {
     'match': '\\.\\.\\.'
@@ -805,7 +534,7 @@
     ]
   'jsx-tag-attribute-name':
     'name': 'meta.tag.attribute-name.js'
-    'match': '\\b([a-zA-Z0-9\\-:]+)'
+    'match': '(?:\\$[a-zA-Z0-9\\-:]+|\\b([a-zA-Z0-9\\-:]+))'
     'captures':
       '1':
         'name': 'entity.other.attribute-name.js'
@@ -1196,13 +925,13 @@
       {
         'match': '({\\b(?:[a-zA-Z_$][a-zA-Z_$0-9]*)\\b})\\s\\b([a-zA-Z_$][a-zA-Z_$0-9]*)\\b\\s*((?:(?!\\*\\/).)*)'
         'captures':
-            0:
+            '0':
               'name': 'other.meta.haxedoc'
-            1:
+            '1':
               'name': 'entity.name.type.instance.haxedoc'
-            2:
+            '2':
               'name': 'variable.other.haxedoc'
-            3:
+            '3':
               'name': 'other.description.haxedoc'
       }
     ]
