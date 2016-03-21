@@ -1,11 +1,23 @@
 {
   "name": "language-haxe",
-  "version": "0.3.0",
+  "version": "0.4.2",
   "description": "Haxe language support in Atom",
-  "repository": "https://github.com/theRemix/language-haxe.git",
+  "keywords": [
+    "haxe",
+    "hx",
+    "hxml"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theRemix/language-haxe.git"
+  },
+  "bugs": {
+    "url": "https://github.com/theRemix/language-haxe/issues"
+  },
   "license": "MIT",
   "engines": {
-    "atom": ">0.50.0"
+    "atom": ">=1.5.0 <2.0.0",
+    "node": "*"
   },
   "dependencies": {}
 }

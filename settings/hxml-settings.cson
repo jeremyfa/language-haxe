@@ -51,9 +51,3 @@
       '--cwd'
       '--each'
     ]
-'.source.hx':
-  'editor':
-    'commentStart': '// '
-    'foldEndPattern': '^\\s*\\}|^\\s*\\]|^\\s*\\)'
-    'increaseIndentPattern': '(\\{[^}"\']*|\\[[^\\]"\']*|\\([^)"\']*|case[\\s\\S]*:|default:)\\s*$'
-    'decreaseIndentPattern': '^\\s*(\\s*/[*].*[*]/\\s*)*[}\\])]'
