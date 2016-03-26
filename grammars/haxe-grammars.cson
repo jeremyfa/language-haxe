@@ -101,7 +101,7 @@
         'name': 'storage.type.modifier.haxe'
       '2':
         'name': 'entity.name.type.haxe'
-    'end': '(?=\\{)'
+    'end': '(?=\\{|;)'
     'patterns': [
       {
         'include': '#comments'
