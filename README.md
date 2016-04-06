@@ -1,44 +1,19 @@
 # Haxe language support in Atom
 
-Adds syntax highlighting and snippets to Haxe files in Atom (`hx`,`hxml`).
+This is an alternative `language-haxe` atom package based on https://github.com/theRemix/language-haxe
 
-Originally [converted](http://atom.io/docs/latest/converting-a-text-mate-bundle)
-from the [Haxe TextMate bundle](https://github.com/jdonaldson/HaXe.tmbundle).
-Also took some grammars and snippets from [nicetrysean](https://github.com/nicetrysean/atom-haxe)
+Even though some (not all) changes might end up in pull requests to the original package, this alternative package may be used _as is_, if it fits better some developers workflow.
 
-Contributions are greatly appreciated. Please fork this repository and open a
-pull request to add snippets, make grammar tweaks, etc.
+### Differences with the original package
 
-See the [Changelog](https://github.com/theRemix/language-haxe/blob/master/CHANGELOG.md)
+* The haxe syntax file was completely rewritten to be based on official atom javascript syntax file as they share a lot of similarities. This adds richer grammar and gives more theming possibilities.
 
-***
+* The new syntax file supports formatting of dom/xml/jsx elements in strings to work with projects like [haxe-react](https://github.com/massiveinteractive/haxe-react/issues/23)
 
-**'v'**
-![v](http://i.imgur.com/J3ytuSc.gif)
+* Every _framework-specific_ matching has been removed from the syntax file (no more hardcoded highlighting of flash/openfl API etc...).
 
-**'var'**
-![var](http://i.imgur.com/c7oiRUj.gif)
+* Many snippets have been removed/edited to match a different coding style/workflow. Ideally, they should be completely removed and put in another package, allowing for more flexibility depending on each developer preferences.
 
-**'fn'**
-![fn](http://i.imgur.com/9sSup2a.gif)
+* Every syntax, snippet and configuration file is now refering to `source.hx` instead of `source.haxe`, because that's how it should be (for instance, javascript in atom uses `source.js`, not `source.javascript`).
 
-**'fun'**
-![fun](http://i.imgur.com/F8GOyD5.gif)
-
-**'pf'**
-![pf](http://i.imgur.com/JTlbPa9.gif)
-
-**'prf'**
-![prf](http://i.imgur.com/2ytFnNt.gif)
-
-**'prsif' 'ret'**
-![prsif ret](http://i.imgur.com/EpRCRCG.gif)
-
-**'switch' 'case' 'def'**
-![switch case def](http://i.imgur.com/5oFnPTg.gif)
-
-**'fori' 'tr'**
-![fori tr](http://i.imgur.com/jD1IQtt.gif)
-
-**'for' 'trace'**
-![for trace](http://i.imgur.com/HocLlST.gif)
+* Indentation was slightly improved.
