@@ -17,3 +17,9 @@ Even though some (not all) changes might end up in pull requests to the original
 * Every syntax, snippet and configuration file is now refering to `source.hx` instead of `source.haxe`, because that's how it should be (for instance, javascript in atom uses `source.js`, not `source.javascript`).
 
 * Indentation was slightly improved.
+
+### How to use
+
+1. Clone the repository
+2. Inside the cloned directory, run ``apm link .``
+3. Restart Atom.
