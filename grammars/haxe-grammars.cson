@@ -759,6 +759,13 @@
   'jsx-tag-invalid':
     'name': 'invalid.illegal.tag.incomplete.haxe'
     'match': '<\\s*>'
+  'jsx-comments':
+    'begin': '<[!%]--'
+    'captures':
+      '0':
+        'name': 'punctuation.definition.comment.xml'
+    'end': '--%?>'
+    'name': 'comment.block.xml'
   'jsx':
     'name': 'meta.jsx.haxe'
     'patterns': [
@@ -770,6 +777,9 @@
       }
       {
         'include': '#jsx-tag-invalid'
+      }
+      {
+        'include': '#jsx-comments'
       }
     ]
   'jsx-inside-double-quoted':
@@ -784,6 +794,9 @@
       {
         'include': '#jsx-tag-invalid'
       }
+      {
+        'include': '#jsx-comments'
+      }
     ]
   'jsx-inside-single-quoted':
     'name': 'meta.jsx.haxe'
@@ -796,6 +809,9 @@
       }
       {
         'include': '#jsx-tag-invalid'
+      }
+      {
+        'include': '#jsx-comments'
       }
     ]
   'function_params':
