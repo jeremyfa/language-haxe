@@ -425,7 +425,7 @@
             'name': 'constant.character.escape.haxe'
           }
           {
-            'include': '#jsx'
+            'include': '#jsx-inside-double-quoted'
           }
         ]
       }
@@ -467,7 +467,7 @@
             'name': 'constant.character.escape.haxe'
           }
           {
-            'include': '#jsx'
+            'include': '#jsx-inside-single-quoted'
           }
         ]
       }
@@ -489,7 +489,7 @@
             'name': 'constant.character.escape.haxe'
           }
           {
-            'include': '#jsx'
+            'include': '#jsx-inside-single-quoted'
           }
         ]
       }
@@ -511,7 +511,7 @@
             'name': 'constant.character.escape.haxe'
           }
           {
-            'include': '#jsx'
+            'include': '#jsx-inside-double-quoted'
           }
         ]
       }
@@ -526,6 +526,36 @@
       }
       {
         'include': '#jsx-string-single-quoted'
+      }
+      {
+        'include': '#jsx-evaluated-code'
+      }
+    ]
+  'jsx-tag-attributes-inside-double-quoted':
+    'patterns': [
+      {
+        'include': '#jsx-tag-attribute-name'
+      }
+      {
+        'include': '#jsx-string-double-quoted-escaped'
+      }
+      {
+        'include': '#jsx-string-single-quoted'
+      }
+      {
+        'include': '#jsx-evaluated-code'
+      }
+    ]
+  'jsx-tag-attributes-inside-single-quoted':
+    'patterns': [
+      {
+        'include': '#jsx-tag-attribute-name'
+      }
+      {
+        'include': '#jsx-string-double-quoted'
+      }
+      {
+        'include': '#jsx-string-single-quoted-escaped'
       }
       {
         'include': '#jsx-evaluated-code'
@@ -552,9 +582,39 @@
         'include': '#jsx-entities'
       }
     ]
+  'jsx-string-double-quoted-escaped':
+    'begin': '\\\\\\"'
+    'end': '\\\\\\"'
+    'name': 'string.quoted.double.js'
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.js'
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.js'
+    'patterns': [
+      {
+        'include': '#jsx-entities'
+      }
+    ]
   'jsx-string-single-quoted':
     'begin': '\''
     'end': '\''
+    'name': 'string.quoted.single.js'
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.js'
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.js'
+    'patterns': [
+      {
+        'include': '#jsx-entities'
+      }
+    ]
+  'jsx-string-single-quoted-escaped':
+    'begin': '\\\\\''
+    'end': '\\\\\''
     'name': 'string.quoted.single.js'
     'endCaptures':
       '0':
@@ -615,6 +675,40 @@
         'include': '#jsx-tag-attributes'
       }
     ]
+  'jsx-tag-open-inside-double-quoted':
+    'begin': '(<)([a-zA-Z0-9\.:$_]+)'
+    'end': '(/?>)'
+    'name': 'tag.open.js'
+    'endCaptures':
+      '1':
+        'name': 'punctuation.definition.tag.end.js'
+    'beginCaptures':
+      '1':
+        'name': 'punctuation.definition.tag.begin.js'
+      '2':
+        'name': 'entity.name.tag.js'
+    'patterns': [
+      {
+        'include': '#jsx-tag-attributes-inside-double-quoted'
+      }
+    ]
+  'jsx-tag-open-inside-single-quoted':
+    'begin': '(<)([a-zA-Z0-9\.:$_]+)'
+    'end': '(/?>)'
+    'name': 'tag.open.js'
+    'endCaptures':
+      '1':
+        'name': 'punctuation.definition.tag.end.js'
+    'beginCaptures':
+      '1':
+        'name': 'punctuation.definition.tag.begin.js'
+      '2':
+        'name': 'entity.name.tag.js'
+    'patterns': [
+      {
+        'include': '#jsx-tag-attributes-inside-single-quoted'
+      }
+    ]
   'jsx-tag-close':
     'match': '(</)([^>]+)(>)'
     'name': 'tag.closed.js'
@@ -633,6 +727,32 @@
     'patterns': [
       {
         'include': '#jsx-tag-open'
+      }
+      {
+        'include': '#jsx-tag-close'
+      }
+      {
+        'include': '#jsx-tag-invalid'
+      }
+    ]
+  'jsx-inside-double-quoted':
+    'name': 'meta.jsx.haxe'
+    'patterns': [
+      {
+        'include': '#jsx-tag-open-inside-double-quoted'
+      }
+      {
+        'include': '#jsx-tag-close'
+      }
+      {
+        'include': '#jsx-tag-invalid'
+      }
+    ]
+  'jsx-inside-single-quoted':
+    'name': 'meta.jsx.haxe'
+    'patterns': [
+      {
+        'include': '#jsx-tag-open-inside-single-quoted'
       }
       {
         'include': '#jsx-tag-close'
