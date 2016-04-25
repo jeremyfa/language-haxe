@@ -391,6 +391,43 @@
   'strings':
     'patterns': [
       {
+        'begin': '\\\\"'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.escaped.begin.haxe'
+        'end': '\\\\"'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.definition.string.escaped.end.haxe'
+        'name': 'string.quoted.double.escaped.haxe'
+        'patterns': [
+          {
+            'match': '\\\\\\\\\\\\.'
+            'name': 'constant.character.escape.haxe'
+          }
+        ]
+      }
+      {
+        'begin': '\\\\\''
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.escaped.begin.haxe'
+        'end': '\\\\\''
+        'endCaptures':
+          '0':
+            'name': 'punctuation.definition.string.escaped.end.haxe'
+        'name': 'string.quoted.single.escaped.haxe'
+        'patterns': [
+          {
+            'include': '#string_interpolations'
+          }
+          {
+            'match': '\\\\\\\\\\\\.'
+            'name': 'constant.character.escape.haxe'
+          }
+        ]
+      }
+      {
         'begin': '"'
         'beginCaptures':
           '0':
@@ -655,13 +692,7 @@
         'name': 'punctuation.definition.brace.curly.start.haxe'
     'patterns': [
       {
-        'include': '#strings'
-      }
-      {
-        'include': '#comments'
-      }
-      {
-        'include': '#metadatas'
+        'include': '$self'
       }
     ]
   'jsx-tag-open':
