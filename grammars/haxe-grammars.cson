@@ -588,10 +588,10 @@
     'name': 'string.quoted.double.haxe'
     'endCaptures':
       '0':
-        'name': 'punctuation.definition.string.end.haxe'
+        'name': 'punctuation.definition.string.escaped.end.haxe'
     'beginCaptures':
       '0':
-        'name': 'punctuation.definition.string.begin.haxe'
+        'name': 'punctuation.definition.string.escaped.begin.haxe'
     'patterns': [
       {
         'include': '#jsx-entities'
@@ -618,10 +618,10 @@
     'name': 'string.quoted.single.haxe'
     'endCaptures':
       '0':
-        'name': 'punctuation.definition.string.end.haxe'
+        'name': 'punctuation.definition.string.escaped.end.haxe'
     'beginCaptures':
       '0':
-        'name': 'punctuation.definition.string.begin.haxe'
+        'name': 'punctuation.definition.string.escaped.begin.haxe'
     'patterns': [
       {
         'include': '#jsx-entities'
@@ -655,7 +655,13 @@
         'name': 'punctuation.definition.brace.curly.start.haxe'
     'patterns': [
       {
-        'include': '$self'
+        'include': '#strings'
+      }
+      {
+        'include': '#comments'
+      }
+      {
+        'include': '#metadatas'
       }
     ]
   'jsx-tag-open':
