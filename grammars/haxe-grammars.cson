@@ -562,21 +562,21 @@
       }
     ]
   'jsx-tag-attribute-name':
-    'name': 'meta.tag.attribute-name.js'
+    'name': 'meta.tag.attribute-name.haxe'
     'match': '(?:\\$[a-zA-Z0-9\\-:]+|\\b([a-zA-Z0-9\\-:]+))'
     'captures':
       '1':
-        'name': 'entity.other.attribute-name.js'
+        'name': 'entity.other.attribute-name.haxe'
   'jsx-string-double-quoted':
     'begin': '"'
     'end': '"'
-    'name': 'string.quoted.double.js'
+    'name': 'string.quoted.double.haxe'
     'endCaptures':
       '0':
-        'name': 'punctuation.definition.string.end.js'
+        'name': 'punctuation.definition.string.end.haxe'
     'beginCaptures':
       '0':
-        'name': 'punctuation.definition.string.begin.js'
+        'name': 'punctuation.definition.string.begin.haxe'
     'patterns': [
       {
         'include': '#jsx-entities'
@@ -585,13 +585,13 @@
   'jsx-string-double-quoted-escaped':
     'begin': '\\\\\\"'
     'end': '\\\\\\"'
-    'name': 'string.quoted.double.js'
+    'name': 'string.quoted.double.haxe'
     'endCaptures':
       '0':
-        'name': 'punctuation.definition.string.end.js'
+        'name': 'punctuation.definition.string.end.haxe'
     'beginCaptures':
       '0':
-        'name': 'punctuation.definition.string.begin.js'
+        'name': 'punctuation.definition.string.begin.haxe'
     'patterns': [
       {
         'include': '#jsx-entities'
@@ -600,13 +600,13 @@
   'jsx-string-single-quoted':
     'begin': '\''
     'end': '\''
-    'name': 'string.quoted.single.js'
+    'name': 'string.quoted.single.haxe'
     'endCaptures':
       '0':
-        'name': 'punctuation.definition.string.end.js'
+        'name': 'punctuation.definition.string.end.haxe'
     'beginCaptures':
       '0':
-        'name': 'punctuation.definition.string.begin.js'
+        'name': 'punctuation.definition.string.begin.haxe'
     'patterns': [
       {
         'include': '#jsx-entities'
@@ -615,13 +615,13 @@
   'jsx-string-single-quoted-escaped':
     'begin': '\\\\\''
     'end': '\\\\\''
-    'name': 'string.quoted.single.js'
+    'name': 'string.quoted.single.haxe'
     'endCaptures':
       '0':
-        'name': 'punctuation.definition.string.end.js'
+        'name': 'punctuation.definition.string.end.haxe'
     'beginCaptures':
       '0':
-        'name': 'punctuation.definition.string.begin.js'
+        'name': 'punctuation.definition.string.begin.haxe'
     'patterns': [
       {
         'include': '#jsx-entities'
@@ -630,29 +630,29 @@
   'jsx-entities':
     'patterns': [
       {
-        'name': 'constant.character.entity.js'
+        'name': 'constant.character.entity.haxe'
         'match': '(&)([a-zA-Z0-9]+|#[0-9]+|#x[0-9a-fA-F]+)(;)'
         'captures':
           '1':
-            'name': 'punctuation.definition.entity.js'
+            'name': 'punctuation.definition.entity.haxe'
           '3':
-            'name': 'punctuation.definition.entity.js'
+            'name': 'punctuation.definition.entity.haxe'
       }
       {
-        'name': 'invalid.illegal.bad-ampersand.js'
+        'name': 'invalid.illegal.bad-ampersand.haxe'
         'match': '&'
       }
     ]
   'jsx-evaluated-code':
     'begin': '{'
     'end': '}'
-    'name': 'meta.brace.curly.js'
+    'name': 'meta.brace.curly.haxe'
     'endCaptures':
       '0':
-        'name': 'punctuation.definition.brace.curly.end.js'
+        'name': 'punctuation.definition.brace.curly.end.haxe'
     'beginCaptures':
       '0':
-        'name': 'punctuation.definition.brace.curly.start.js'
+        'name': 'punctuation.definition.brace.curly.start.haxe'
     'patterns': [
       {
         'include': '$self'
@@ -661,15 +661,15 @@
   'jsx-tag-open':
     'begin': '(<)([a-zA-Z0-9\.:$_]+)'
     'end': '(/?>)'
-    'name': 'tag.open.js'
+    'name': 'tag.open.haxe'
     'endCaptures':
       '1':
-        'name': 'punctuation.definition.tag.end.js'
+        'name': 'punctuation.definition.tag.end.haxe'
     'beginCaptures':
       '1':
-        'name': 'punctuation.definition.tag.begin.js'
+        'name': 'punctuation.definition.tag.begin.haxe'
       '2':
-        'name': 'entity.name.tag.js'
+        'name': 'entity.name.tag.haxe'
     'patterns': [
       {
         'include': '#jsx-tag-attributes'
@@ -678,15 +678,15 @@
   'jsx-tag-open-inside-double-quoted':
     'begin': '(<)([a-zA-Z0-9\.:$_]+)'
     'end': '(/?>)'
-    'name': 'tag.open.js'
+    'name': 'tag.open.haxe'
     'endCaptures':
       '1':
-        'name': 'punctuation.definition.tag.end.js'
+        'name': 'punctuation.definition.tag.end.haxe'
     'beginCaptures':
       '1':
-        'name': 'punctuation.definition.tag.begin.js'
+        'name': 'punctuation.definition.tag.begin.haxe'
       '2':
-        'name': 'entity.name.tag.js'
+        'name': 'entity.name.tag.haxe'
     'patterns': [
       {
         'include': '#jsx-tag-attributes-inside-double-quoted'
@@ -695,15 +695,15 @@
   'jsx-tag-open-inside-single-quoted':
     'begin': '(<)([a-zA-Z0-9\.:$_]+)'
     'end': '(/?>)'
-    'name': 'tag.open.js'
+    'name': 'tag.open.haxe'
     'endCaptures':
       '1':
-        'name': 'punctuation.definition.tag.end.js'
+        'name': 'punctuation.definition.tag.end.haxe'
     'beginCaptures':
       '1':
-        'name': 'punctuation.definition.tag.begin.js'
+        'name': 'punctuation.definition.tag.begin.haxe'
       '2':
-        'name': 'entity.name.tag.js'
+        'name': 'entity.name.tag.haxe'
     'patterns': [
       {
         'include': '#jsx-tag-attributes-inside-single-quoted'
@@ -711,16 +711,16 @@
     ]
   'jsx-tag-close':
     'match': '(</)([^>]+)(>)'
-    'name': 'tag.closed.js'
+    'name': 'tag.closed.haxe'
     'captures':
       '1':
-        'name': 'punctuation.definition.tag.begin.js'
+        'name': 'punctuation.definition.tag.begin.haxe'
       '2':
-        'name': 'entity.name.tag.js'
+        'name': 'entity.name.tag.haxe'
       '3':
-        'name': 'punctuation.definition.tag.end.js'
+        'name': 'punctuation.definition.tag.end.haxe'
   'jsx-tag-invalid':
-    'name': 'invalid.illegal.tag.incomplete.js'
+    'name': 'invalid.illegal.tag.incomplete.haxe'
     'match': '<\\s*>'
   'jsx':
     'name': 'meta.jsx.haxe'
