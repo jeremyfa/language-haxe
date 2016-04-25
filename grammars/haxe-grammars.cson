@@ -356,7 +356,7 @@
         'name': 'keyword.operator.assignment.compound.bitwise.haxe'
       }
       {
-        'match': '!==|!=|<=|>=|===|==|<|>'
+        'match': '!=|<=|>=|==|<|>'
         'name': 'keyword.operator.comparison.haxe'
       }
       {
