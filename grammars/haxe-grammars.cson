@@ -148,7 +148,7 @@
     'name': 'storage.type.haxe'
   }
   {
-    'match': '(?<!\\.)\\b(extends|implements|private|protected|public|static|dynamic|override)(?!\\s*:)\\b'
+    'match': '(?<!\\.)\\b(extends|implements|private|protected|public|static|dynamic|override|inline|macro)(?!\\s*:)\\b'
     'name': 'storage.modifier.haxe'
   }
   {
