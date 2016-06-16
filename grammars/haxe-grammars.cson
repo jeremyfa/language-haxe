@@ -200,7 +200,7 @@
     'name': 'constant.language.haxe'
   }
   {
-    'begin': '(?<=[\\[=(?:+,!]|^|return|=>|&&|\\|\\|)\\s*(/)(?![/*+{}?])(?=.*/)'
+    'begin': '(~/)(?:[^/\\\\]*(?:\\\\.[^/\\\\]*)*)'
     'beginCaptures':
       '1':
         'name': 'punctuation.definition.string.begin.haxe'
