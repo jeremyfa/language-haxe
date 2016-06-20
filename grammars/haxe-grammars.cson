@@ -44,6 +44,9 @@
         'include': '#comments'
       }
       {
+        'include': '#constants'
+      }
+      {
         'include': '#types'
       }
     ]
@@ -85,6 +88,9 @@
         'include': '#properties'
       }
       {
+        'include': '#constants'
+      }
+      {
         'include': '#types'
       }
       {
@@ -111,6 +117,9 @@
       }
       {
         'include': '#properties'
+      }
+      {
+        'include': '#constants'
       }
       {
         'include': '#types'
@@ -188,12 +197,7 @@
         'name': 'constant.language.null.haxe'
   }
   {
-    'match': '(?<!\\.)\\b([A-Z][A-Z0-9_]+)(?!\\s*:)\\b|(?<=\\?)(?:\\s*)([A-Z][A-Z0-9_]+)(?=\\s*:)'
-    'captures':
-      '1':
-        'name': 'constant.other.haxe'
-      '2':
-        'name': 'constant.other.haxe'
+    'include': '#constants'
   }
   {
     'match': '\\b(Infinity|NaN|undefined)\\b'
@@ -1040,6 +1044,17 @@
         'captures':
           '1':
             'name': 'storage.modifier.haxe'
+      }
+    ]
+  'constants':
+    'patterns': [
+      {
+        'match': '(?<!\\.)\\b([A-Z][A-Z0-9_]+)\\b|(?<=\\?)(?:\\s*)([A-Z][A-Z0-9_]+)(?=\\s*:)'
+        'captures':
+          '1':
+            'name': 'constant.other.haxe'
+          '2':
+            'name': 'constant.other.haxe'
       }
     ]
   'types':
